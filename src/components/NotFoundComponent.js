@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class NotFoundWalletPage extends Component {
+export default class NotFoundWallet extends Component {
 
 	render() {
 

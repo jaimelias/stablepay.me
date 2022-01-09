@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  {fetchWallet} from '../redux/actionCreators';
+import { EnterAmountInput } from './Elements';
 
-
-const mapDispatchToProps = (dispatch) => (
+const mapDispatchToProps = dispatch => (
 {
 	fetchWallet: () => dispatch(fetchWallet())
 });
 
 const mapStateToProps = state => ({
-	wallet: state.wallet
+	Wallet: state.Wallet,
+	Controllers: state.Controllers
 });
 
 class Main extends Component {
@@ -19,9 +20,14 @@ class Main extends Component {
 	}
 	render() {
 
-		console.log(this.props);
+		const {Controllers, walletPath} = this.props;
 
-		return (<h1>Wallet Page</h1>);
+		return (
+			<>
+				<h1>{walletPath}</h1>
+				<EnterAmountInput Controllers={Controllers}/>
+			</>
+		);
 
 	};
 }

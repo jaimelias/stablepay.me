@@ -1,0 +1,1 @@
+export const isValidAmount = val => /^\d*\.?\d*$/.test(val);
