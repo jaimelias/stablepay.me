@@ -6,15 +6,15 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import './App.css';
+import "@fontsource/raleway";
 import  { Provider } from 'react-redux';
 import { useParams } from "react-router-dom";
 import  { ConfigureStore } from './redux/configureStore';
+import {isValidSlug} from './utilities/utilities';
+import {themeConfig} from './assets/theme';
 const store = ConfigureStore();
 
-const theme = createTheme();
-
-//lower case alphanumerical and dots
-const isValidSlug = val => /^[a-z0-9]+(?:.[a-z0-9]+)*$/.test(val);
+const theme = createTheme(themeConfig);
 
 export const App = () => {
 	let {walletPath} = useParams();

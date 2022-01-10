@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  {fetchWallet} from '../redux/actionCreators';
-import { EnterAmountInput } from './Elements';
+import { EnterAmountInput, DisplayStableLogos } from './Elements';
+import Typography from '@mui/material/Typography';
+
 
 const mapDispatchToProps = dispatch => (
 {
@@ -24,8 +26,9 @@ class Main extends Component {
 
 		return (
 			<>
-				<h1>{walletPath}</h1>
+				<Typography my={2} variant="h4" component="h1">{walletPath}</Typography>
 				<EnterAmountInput Controllers={Controllers}/>
+				<DisplayStableLogos />
 			</>
 		);
 
