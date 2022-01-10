@@ -2,6 +2,12 @@ export const themeConfig = {
     typography: {
         fontFamily: 'Raleway, Arial',
     },
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#8dd35f'
+        }
+    },
     components: {
         MuiCssBaseline: {
         styleOverrides: `

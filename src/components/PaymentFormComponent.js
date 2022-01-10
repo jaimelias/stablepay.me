@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import  {isValidAmountTyping, isInvalidAmountString} from '../utilities/utilities';
 import FormControl from '@mui/material/FormControl';
-import FilledInput from '@mui/material/FilledInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,6 +10,8 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import TextField from '@mui/material/TextField';
+import Dollar from '../assets/svg/icons/dollar.svg';
 import * as actionTypes from '../redux/actionTypes';
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_STABLECOIN} = actionTypes;
@@ -79,22 +80,34 @@ export default class PaymentForm extends Component {
 
     render(){
 
-        const {Controllers, Config} = this.props;
-        const {amount, network} = Controllers;
+        const {Controllers, Config, pathAmount} = this.props;
+        const {amount, network, stablecoin} = Controllers;
         const {networks, stablecoins} = Config;
+        const invalidPathAmount = isInvalidAmountString(pathAmount);
         const invalidAmount = isInvalidAmountString(amount);
         const invalidNetwork = !networks.hasOwnProperty(network);
+        const invalidStablecoin = !stablecoins.hasOwnProperty(stablecoin);
 
         return (
             <>
-                <FormControl fullWidth variant="filled" sx={{mb: 3}}>
-                    <InputLabel htmlFor="amount">{'Amount'}</InputLabel>
-                    <FilledInput
-                        id="amount"
-                        value={amount || ''}
-                        onChange={event => this.handleAmountChange(event)}
-                        startAdornment={<InputAdornment position="start">$</InputAdornment>} />
-                </FormControl>
+
+                <TextField
+                    autoFocus={invalidPathAmount}
+                    sx={{mb: 3}}
+                    fullWidth
+                    id="amount"
+                    label={'Amount'}
+                    onChange={event => this.handleAmountChange(event)}
+                    value={amount || ''}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <img alt="dollar" src={Dollar} width="20" height="20" />
+                            </InputAdornment>
+                        )
+                    }}
+                    variant="filled"
+                />                
 
                 <FormControl fullWidth variant="filled" sx={{mb: 3}}>
                     <InputLabel id="network-label">{'Network'}</InputLabel>
@@ -104,6 +117,7 @@ export default class PaymentForm extends Component {
                         value={network}
                         label={'Network'}
                         onChange={event => this.handleNetworkSelect(event)}
+                        disabled={invalidAmount}
                         >
                     {
                         Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].name}</MenuItem>)
@@ -119,6 +133,7 @@ export default class PaymentForm extends Component {
                         aria-label="stablecoin"
                         name="stablecoin"
                         onChange={event => this.handleStablecoinSelect(event)}
+                        disabled={invalidNetwork}
                         >
                         {
                             Object.keys(stablecoins).map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={stablecoins[v].longName} />)
@@ -126,7 +141,7 @@ export default class PaymentForm extends Component {
                     </RadioGroup>
                 </FormControl>
                 
-                <Button disabled={invalidAmount || invalidNetwork} type="submit" fullWidth variant="contained" sx={{mb: 2 }}>{'Choose Network'}</Button>
+                <Button disabled={invalidAmount || invalidNetwork || invalidStablecoin} type="submit" fullWidth variant="contained" sx={{mb: 2 }}>{'Choose Network'}</Button>
             </>
         );
 
