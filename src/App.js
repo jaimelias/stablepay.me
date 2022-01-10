@@ -10,7 +10,7 @@ import "@fontsource/raleway";
 import  { Provider } from 'react-redux';
 import { useParams } from "react-router-dom";
 import  { ConfigureStore } from './redux/configureStore';
-import {isValidSlug, isValidAmountTyping, isInvalidAmountString} from './utilities/utilities';
+import {isValidSlug} from './utilities/utilities';
 import {themeConfig} from './assets/theme';
 const store = ConfigureStore();
 
@@ -21,7 +21,7 @@ export const App = () => {
 
 	const MainComponent = () => (
 		<Provider store={store}>
-			<Main walletPath={walletPath}  slugAmount={amount} />
+			<Main walletPath={walletPath}  pathAmount={amount} />
 		</Provider>
 	);
 

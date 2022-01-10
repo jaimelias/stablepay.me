@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  {fetchWallet} from '../redux/actionCreators';
-import { EnterAmountForm, DisplayStableLogos } from './appElements';
+import  {fetchWallet, dispatchInputChanges} from '../redux/actionCreators';
+import { DisplayStableLogos } from './appElements';
+import PaymentForm from './PaymentFormComponent';
 import Typography from '@mui/material/Typography';
-import  {isValidAmountTyping, isInvalidAmountString} from '../utilities/utilities';
+import * as Config from '../assets/config';
 
 const mapDispatchToProps = dispatch => (
 {
-	fetchWallet: () => dispatch(fetchWallet())
+	fetchWallet: () => dispatch(fetchWallet()),
+	dispatchInputChanges: ({type, payload}) => dispatch(dispatchInputChanges({type, payload}))
 });
 
 const mapStateToProps = state => ({
@@ -22,13 +24,18 @@ class Main extends Component {
 	}
 	render() {
 
-		const {Controllers, walletPath, slugAmount} = this.props;
+		const {Controllers, walletPath, pathAmount, dispatchInputChanges} = this.props;
 
 		return (
 			<>
 				<Typography my={2} variant="h4" component="h1">{walletPath}</Typography>
 				
-				<EnterAmountForm Controllers={Controllers} slugAmount={slugAmount}/>
+				<PaymentForm 
+					Controllers={Controllers} 
+					pathAmount={pathAmount} 
+					dispatchInputChanges={dispatchInputChanges} 
+					Config={Config}
+					/>
 
 				<DisplayStableLogos />
 			</>

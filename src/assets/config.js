@@ -17,7 +17,7 @@ export const networks = {
 	}
 };
 
-export const stableCoins = {
+export const stablecoins = {
 	ustd: {
 			name: 'Tether',
 			longName: 'Tether (USTD)',
@@ -31,7 +31,7 @@ export const stableCoins = {
 	},
 	usdc: {
 			name: 'USDC',
-			longName: 'USD Coin',
+			longName: 'USD Coin (USDC)',
 			decimals: 6,
 			addresses: {
 				binanceSmartChain: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
