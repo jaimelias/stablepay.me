@@ -10,24 +10,24 @@ import "@fontsource/raleway";
 import  { Provider } from 'react-redux';
 import { useParams } from "react-router-dom";
 import  { ConfigureStore } from './redux/configureStore';
-import {isValidSlug} from './utilities/utilities';
+import {isValidSlug, isValidAmountTyping, isInvalidAmountString} from './utilities/utilities';
 import {themeConfig} from './assets/theme';
 const store = ConfigureStore();
 
 const theme = createTheme(themeConfig);
 
 export const App = () => {
-	let {walletPath} = useParams();
+	const {walletPath, amount} = useParams();
 
 	const MainComponent = () => (
 		<Provider store={store}>
-			<Main walletPath={walletPath} />
+			<Main walletPath={walletPath}  slugAmount={amount} />
 		</Provider>
 	);
 
 	const RenderMainComponent = () => (isValidSlug(walletPath)) 
 
-		? <MainComponent  walletPath={walletPath} />
+		? <MainComponent />
 
 		: <NotFoundWallet />;
 
