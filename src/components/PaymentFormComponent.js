@@ -11,6 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import dollarIcon from '../assets/svg/icons/dollar.svg';
 import ustdIcon from '../assets/svg/crypto/ustd.svg';
 import usdcIcon from '../assets/svg/crypto/usdc.svg';
@@ -39,6 +40,7 @@ export default class PaymentForm extends Component {
         this.handleStablecoinSelect = this.handleStablecoinSelect.bind(this);
         this.handleOpenExplorer = this.handleOpenExplorer.bind(this);
         this.handleOpenWalletConfirm = this.handleOpenWalletConfirm.bind(this);
+        this.handleGoBack = this.handleGoBack.bind(this);
     };
 
     handleAmountChange(amount){
@@ -108,6 +110,16 @@ export default class PaymentForm extends Component {
                 payload: 'paymentConfirmation'
             });         
         }        
+    }
+
+    handleGoBack(){
+
+        const {dispatchInputChanges} = this.props;
+
+        dispatchInputChanges({
+            type: CONTROLLER_CHANGE_APP_SCREEN,
+            payload: 'paymentConfiguration'
+        });            
     }
 
     componentDidMount(){
@@ -210,41 +222,45 @@ export default class PaymentForm extends Component {
         const RenderPaymentConfirmationComponent = () => {
 
             return (
-                <List
-                component="nav"
-                sx={{
-                  width: '100%',
-                  maxWidth: 360,
-                  bgcolor: 'background.paper',
-                }}
-              >
-                <ListItem>
-                  <ListItemAvatar>
-                     <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
-                  </ListItemAvatar>
-                  <ListItemText primary={networks[network].longName} secondary={'Network'} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
-                  <ListItemAvatar>
-                    <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
-                  </ListItemAvatar>
-                  <ListItemText primary={coins[coin].longName} secondary={'Token Contract'} />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-                <RecipientAddressListItem 
-                    walletAddress={walletAddress}
-                    recipientAddressLabel={'Recipient Address'}
-                    successMessage={'Recipient address copied to clipboard!'}
-                    />
-                <Divider variant="inset" component="li" />
-                <ListItem>
-                  <ListItemAvatar>
-                      <img src={dollarIcon} alt="amount" width="40" height="40" />
-                  </ListItemAvatar>
-                  <ListItemText primary={amount} secondary={'Amount'} />
-                </ListItem>
-              </List>
+                <>
+                    <List
+                        component="nav"
+                        sx={{
+                        mb: 3,
+                        width: '100%',
+                        maxWidth: 360,
+                        bgcolor: 'background.paper',
+                        }}
+                    >
+                        <ListItem>
+                        <ListItemAvatar>
+                            <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
+                        </ListItemAvatar>
+                        <ListItemText primary={networks[network].longName} secondary={'Network'} />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
+                        <ListItemAvatar>
+                            <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
+                        </ListItemAvatar>
+                        <ListItemText primary={coins[coin].longName} secondary={'Token Contract'} />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                        <RecipientAddressListItem 
+                            walletAddress={walletAddress}
+                            recipientAddressLabel={'Recipient Address'}
+                            successMessage={'Recipient address copied to clipboard!'}
+                            />
+                        <Divider variant="inset" component="li" />
+                        <ListItem>
+                        <ListItemAvatar>
+                            <img src={dollarIcon} alt="amount" width="40" height="40" />
+                        </ListItemAvatar>
+                        <ListItemText primary={amount} secondary={'Amount'} />
+                        </ListItem>
+                    </List>
+                    <Button onClick={() => this.handleGoBack()}><Typography variant="h5">&#8592;</Typography></Button>
+                </>
             );
         };
 
