@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  {fetchWallet, dispatchInputChanges} from '../redux/actionCreators';
-import { DisplayStableLogos } from './appElements';
 import PaymentForm from './PaymentFormComponent';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 import * as Config from '../assets/config';
 
 const mapDispatchToProps = dispatch => (
@@ -21,28 +22,39 @@ const mapStateToProps = state => ({
 class Main extends Component {
 
 	componentDidMount() {
-		this.props.fetchWallet();
+		setTimeout(() => this.props.fetchWallet(), 3000);
 	}
 	render() {
 
-		const {Controllers, walletPath, pathAmount, dispatchInputChanges} = this.props;
+		const {Controllers, Wallet, walletPath, pathAmount, dispatchInputChanges} = this.props;
 
 		return (
 			<>
-				<Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+				<Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
 
 					<Typography mb={3} variant="h5" component="h1" align="center">{walletPath}</Typography>
 					
-					<PaymentForm 
-						Controllers={Controllers} 
-						pathAmount={pathAmount} 
-						dispatchInputChanges={dispatchInputChanges} 
-						Config={Config}
-						/>
+					{Wallet.status === 'ok' ?	
+						<>
+							<PaymentForm 
+								Controllers={Controllers} 
+								Wallet={Wallet}
+								pathAmount={pathAmount} 
+								dispatchInputChanges={dispatchInputChanges} 
+								Config={Config}
+								/>
+						</>
+					: ''}
+
+
+					{Wallet.status === 'loading' ?	
+						<Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+							<CircularProgress />
+						</Box>
+					: ''}					
+
 
 				</Paper>
-
-				<DisplayStableLogos />
 			</>
 		);
 
