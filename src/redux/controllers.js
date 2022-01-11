@@ -3,7 +3,8 @@ import * as actionTypes from './actionTypes';
 export const Controllers = (state = {
     status: 'loading',
     amount: '',
-    network: ''
+    network: '',
+    stablecoin: ''
 }, action) => {
     switch (action.type)
     {

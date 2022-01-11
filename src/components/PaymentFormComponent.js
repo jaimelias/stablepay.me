@@ -88,6 +88,8 @@ export default class PaymentForm extends Component {
         const invalidNetwork = !networks.hasOwnProperty(network);
         const invalidStablecoin = !stablecoins.hasOwnProperty(stablecoin);
 
+        console.log({invalidNetwork, stablecoin});
+
         return (
             <>
 
@@ -133,15 +135,15 @@ export default class PaymentForm extends Component {
                         aria-label="stablecoin"
                         name="stablecoin"
                         onChange={event => this.handleStablecoinSelect(event)}
-                        disabled={invalidNetwork}
+                        value={stablecoin}
                         >
                         {
-                            Object.keys(stablecoins).map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={stablecoins[v].longName} />)
+                            Object.keys(stablecoins).map(v => <FormControlLabel key={v} value={v} disabled={invalidNetwork || invalidAmount} control={<Radio />} label={stablecoins[v].longName} />)
                         }
                     </RadioGroup>
                 </FormControl>
                 
-                <Button disabled={invalidAmount || invalidNetwork || invalidStablecoin} type="submit" fullWidth variant="contained" sx={{mb: 2 }}>{'Choose Network'}</Button>
+                <Button disabled={invalidAmount || invalidNetwork || invalidStablecoin} type="submit" fullWidth variant="contained">{'Proceed'}</Button>
             </>
         );
 
