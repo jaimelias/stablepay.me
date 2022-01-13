@@ -1,6 +1,9 @@
 import React from 'react';
 import  {abbreviateAddress} from '../utilities/utilities';
 import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 import Snackbar from '@mui/material/Snackbar';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -59,3 +62,18 @@ export const RecipientAddressListItem = ({walletAddress, recipientAddressLabel, 
         </>
     );
   }
+
+  export const StepsComponent = ({steps, appScreenNumber}) => {
+
+    return (
+        <Box sx={{ width: '100%' }}>
+          <Stepper activeStep={appScreenNumber} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+      );
+  };

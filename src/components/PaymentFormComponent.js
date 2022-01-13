@@ -24,8 +24,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
-import {RecipientAddressListItem} from './appElements';
+import {RecipientAddressListItem, StepsComponent} from './appElements';
 
 const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon};
 
@@ -49,6 +50,8 @@ export default class PaymentForm extends Component {
 
         if(isValidAmountTyping(amount))
         {
+            //validats the amount while typing
+            
             dispatchInputChanges({
                 type: CONTROLLER_CHANGE_AMOUNT,
                 payload: amount || ''
@@ -57,15 +60,29 @@ export default class PaymentForm extends Component {
     };
 
     handleNetworkSelect(network){
-        const {dispatchInputChanges, Config} = this.props;
-        const {networks} = Config;
+        const {dispatchInputChanges, Config, Controllers} = this.props;
+        const {coin} = Controllers;
+        const {networks, coins} = Config;
 
         if(networks.hasOwnProperty(network) || network === '')
         {
+            //sets the network
             dispatchInputChanges({
                 type: CONTROLLER_SELECT_NETWORK,
                 payload: network || ''
-            });   
+            });
+
+            // unsets coin if not available in network
+            if(coins.hasOwnProperty(coin))
+            {
+                if(!coins[coin].addresses[network])
+                {
+                    dispatchInputChanges({
+                        type: CONTROLLER_SELECT_COIN,
+                        payload: ''
+                    });
+                }
+            }
         }
     }
 
@@ -107,7 +124,7 @@ export default class PaymentForm extends Component {
 
             dispatchInputChanges({
                 type: CONTROLLER_CHANGE_APP_SCREEN,
-                payload: 'paymentConfirmation'
+                payload: 'app.payment.2'
             });         
         }        
     }
@@ -118,7 +135,7 @@ export default class PaymentForm extends Component {
 
         dispatchInputChanges({
             type: CONTROLLER_CHANGE_APP_SCREEN,
-            payload: 'paymentConfiguration'
+            payload: 'app.payment.1'
         });            
     }
 
@@ -143,7 +160,7 @@ export default class PaymentForm extends Component {
         const invalidPathAmount = isInvalidAmountString(pathAmount);
         const invalidAmount = isInvalidAmountString(amount);
         const invalidNetwork = !networks.hasOwnProperty(network);
-        const invalidStablecoin = !coins.hasOwnProperty(coin);
+        const invalidCoin = !coins.hasOwnProperty(coin);
         const walletAddress = (Wallet.data.hasOwnProperty('address')) ? Wallet.data.address : '';
         let availableCoins = Object.keys(coins);
 
@@ -153,25 +170,13 @@ export default class PaymentForm extends Component {
                 .filter(v => coins[v].addresses.hasOwnProperty(network) ? coins[v].addresses[network] ? true : false : false);
         }
 
+
+        const appScreenArr = appScreen.split('.');
+        const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);        
+
         const RenderPaymentConfigComponent = () => (
             <>
-                <TextField
-                    autoFocus={invalidPathAmount}
-                    sx={{mb: 3}}
-                    fullWidth
-                    id="amount"
-                    label={'Amount'}
-                    onChange={event => this.handleAmountChange(event.target.value)}
-                    value={amount || ''}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <img alt="dollarIcon" src={dollarIcon} width="20" height="20" />
-                            </InputAdornment>
-                        )
-                    }}
-                    variant="filled"
-                />                
+              
 
                 <FormControl fullWidth variant="filled" sx={{mb: 3}}>
                     <InputLabel id="network-label">{'Network'}</InputLabel>
@@ -181,7 +186,6 @@ export default class PaymentForm extends Component {
                         value={network}
                         label={'Network'}
                         onChange={event => this.handleNetworkSelect(event.target.value)}
-                        disabled={invalidAmount}
                         >
                     {
                         Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].longName}</MenuItem>)
@@ -190,9 +194,8 @@ export default class PaymentForm extends Component {
                     </Select>
                 </FormControl>
 
-
                 <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
-                    <FormLabel component="legend">{'Coin'}</FormLabel>
+                    <FormLabel component="legend">{'Coins'}</FormLabel>
                     <RadioGroup
                         aria-label="coin"
                         name="coin"
@@ -202,13 +205,32 @@ export default class PaymentForm extends Component {
                         {
                            
                            availableCoins
-                            .map(v => <FormControlLabel key={v} value={v} disabled={invalidNetwork || invalidAmount} control={<Radio />} label={coins[v].longName} />)
+                            .map(v => <FormControlLabel key={v} value={v} disabled={invalidNetwork} control={<Radio />} label={coins[v].longName} />)
                         }
                     </RadioGroup>
                 </FormControl>
+
+                <TextField
+                    autoFocus={invalidPathAmount}
+                    disabled={invalidNetwork || invalidCoin}
+                    sx={{mb: 3}}
+                    fullWidth
+                    id="amount"
+                    label={'Amount'}
+                    onChange={event => this.handleAmountChange(event.target.value)}
+                    value={amount || ''}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <img alt="paymentIcon" src={(invalidCoin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
+                            </InputAdornment>
+                        )
+                    }}
+                    variant="filled"
+                />
                 
                 <Button 
-                    disabled={invalidAmount || invalidNetwork || invalidStablecoin} 
+                    disabled={invalidAmount || invalidNetwork || invalidCoin} 
                     sx={{mb: 3}} 
                     type="button" 
                     fullWidth
@@ -232,18 +254,26 @@ export default class PaymentForm extends Component {
                         bgcolor: 'background.paper',
                         }}
                     >
+
                         <ListItem>
-                        <ListItemAvatar>
-                            <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
-                        </ListItemAvatar>
-                        <ListItemText primary={networks[network].longName} secondary={'Network'} />
+                            <ListItemAvatar>
+                                <img src={dollarIcon} alt="amount" width="40" height="40" />
+                            </ListItemAvatar>
+                            <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={'Amount'} />
+                        </ListItem> 
+                        <Divider variant="inset" component="li" />                      
+                        <ListItem>
+                            <ListItemAvatar>
+                                <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
+                            </ListItemAvatar>
+                            <ListItemText primary={networks[network].longName} secondary={'Network'} />
                         </ListItem>
                         <Divider variant="inset" component="li" />
                         <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
-                        <ListItemAvatar>
-                            <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
-                        </ListItemAvatar>
-                        <ListItemText primary={coins[coin].longName} secondary={'Token Contract'} />
+                            <ListItemAvatar>
+                                <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
+                            </ListItemAvatar>
+                            <ListItemText primary={coins[coin].longName} secondary={'Contract'} />
                         </ListItem>
                         <Divider variant="inset" component="li" />
                         <RecipientAddressListItem 
@@ -251,13 +281,7 @@ export default class PaymentForm extends Component {
                             recipientAddressLabel={'Recipient Address'}
                             successMessage={'Recipient address copied to clipboard!'}
                             />
-                        <Divider variant="inset" component="li" />
-                        <ListItem>
-                        <ListItemAvatar>
-                            <img src={dollarIcon} alt="amount" width="40" height="40" />
-                        </ListItemAvatar>
-                        <ListItemText primary={amount} secondary={'Amount'} />
-                        </ListItem>
+                       
                     </List>
                     <Button onClick={() => this.handleGoBack()}><Typography variant="h5">&#8592;</Typography></Button>
                 </>
@@ -267,13 +291,18 @@ export default class PaymentForm extends Component {
         return (
             <>
 
-                {appScreen === 'paymentConfiguration'? <>
+                <Box sx={{mb: 3}}>
+                  <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
+                </Box>                
+
+                {appScreen === 'app.payment.1'? <>
                     <RenderPaymentConfigComponent />
                 </> : ''}
 
-                {appScreen === 'paymentConfirmation' && !invalidAmount && !invalidNetwork && !invalidStablecoin ?  <>
+                {appScreen === 'app.payment.2' && !invalidAmount && !invalidNetwork && !invalidCoin ?  <>
                   <RenderPaymentConfirmationComponent />
                 </> : ''}
+
             </>
         );
 

@@ -42,13 +42,13 @@ export const coins = {
 		}
 	},
 	busd: {
-		name: 'BUSD',
-		longName: 'Binance USD (BUSD)',
-		decimals: 18,
-		addresses: {
-			binanceSmartChain: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-			ethereum: '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
-			polygon: ''
+			name: 'BUSD',
+			longName: 'Binance USD (BUSD)',
+			decimals: 18,
+			addresses: {
+				binanceSmartChain: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+				ethereum: '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
+				polygon: ''
 		}
 	}
 };

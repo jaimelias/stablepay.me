@@ -4,7 +4,7 @@ export const Controllers = (state = {
     amount: '',
     network: '',
     coin: '',
-    appScreen: 'paymentConfiguration',
+    appScreen: 'app.payment.1',
 }, action) => {
     switch (action.type)
     {
