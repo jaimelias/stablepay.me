@@ -19,6 +19,10 @@ import busdIcon from '../assets/svg/crypto/busd.svg';
 import binanceSmartChainIcon from '../assets/svg/crypto/binanceSmartChain.svg';
 import ethereumIcon from '../assets/svg/crypto/ethereum.svg';
 import polygonIcon from '../assets/svg/crypto/polygon.svg';
+import btcIcon from '../assets/svg/crypto/btc.svg';
+import ethIcon from '../assets/svg/crypto/eth.svg';
+import bnbIcon from '../assets/svg/crypto/bnb.svg';
+import maticIcon from '../assets/svg/crypto/matic.svg';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -28,7 +32,7 @@ import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
 import {RecipientAddressListItem, StepsComponent} from './appElements';
 
-const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon};
+const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
@@ -99,8 +103,8 @@ export default class PaymentForm extends Component {
     }
 
     handleStablecoinSelect(coin){
-        const {dispatchInputChanges, Config} = this.props;
-        const {coins} = Config;
+        const {dispatchInputChanges, Controllers} = this.props;
+        const {coins} = Controllers;
         if(coins.hasOwnProperty(coin) || coin === '')
         {
             dispatchInputChanges({
@@ -111,8 +115,9 @@ export default class PaymentForm extends Component {
     };
 
     handleOpenExplorer({coin, network}){
-        const {Config} = this.props;
-        const {coins, networks} = Config;
+        const {Config, Controllers} = this.props;
+        const {coins} = Controllers
+        const {networks} = Config;
 
         if(coins.hasOwnProperty(coin))
         {

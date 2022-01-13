@@ -1,26 +1,66 @@
 
 export const networks = {
+	bitcoin: {
+		name: 'Bitcoin',
+		longName: 'Bitcoin (BTC)',
+		mainCoinCode: 'btc'
+	},	
 	ethereum: {
 		name: 'Ethereum',
 		longName: 'Ethereum (ERC-20)',
 		chainId: 1,
-		explorer: 'https://etherscan.io/token/'
+		explorer: 'https://etherscan.io/token/',
+		mainCoinCode: 'eth'
 	},
 	binanceSmartChain: {
 		name: 'Binance Smart Chain',
 		longName: 'Binance Smart Chain (BEP-20)',
 		chainId: 56,
-		explorer: 'https://bscscan.com/token/'
+		explorer: 'https://bscscan.com/token/',
+		mainCoinCode: 'bnb'
 	},
 	polygon: {
 		name: 'Polygon',
 		longName: 'Polygon (MATIC)',
 		chainId: 137,
-		explorer: 'https://polygonscan.com/token/'
+		explorer: 'https://polygonscan.com/token/',
+		mainCoinCode: 'matic'
 	}
 };
 
 export const coins = {
+	btc: {
+			name: 'Bitcoin',
+			longName: 'Bitcoin (BTC)',
+			decimals: 8,
+			addresses: {
+				bitcoin: true
+		}
+	},
+	eth: {
+			name: 'Ethereum',
+			longName: 'Ethereum (ETH)',
+			decimals: 18,
+			addresses: {
+				ethereum: true
+		}
+	},
+	bnb: {
+			name: 'Binance Coin',
+			longName: 'Binance Coin (BNB)',
+			decimals: 18,
+			addresses: {
+				binanceSmartChain: true
+		}
+	},
+	matic: {
+			name: 'Binance Coin',
+			longName: 'Binance Coin (BNB)',
+			decimals: 18,
+			addresses: {
+				polygon: true
+		}
+	},
 	ustd: {
 			name: 'Tether',
 			longName: 'Tether (USTD)',
@@ -47,8 +87,7 @@ export const coins = {
 			decimals: 18,
 			addresses: {
 				binanceSmartChain: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-				ethereum: '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
-				polygon: ''
+				ethereum: '0x4Fabb145d64652a948d72533023f6E7A623C7C53'
 		}
 	}
 };
