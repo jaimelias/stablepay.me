@@ -61,15 +61,27 @@ export default class PaymentForm extends Component {
 
     handleNetworkSelect(network){
         const {dispatchInputChanges, Config, Controllers} = this.props;
-        const {coin} = Controllers;
+        let {coin} = Controllers;
         const {networks, coins} = Config;
 
-        if(networks.hasOwnProperty(network) || network === '')
+        if(networks.hasOwnProperty(network))
         {
-            //sets the network
+
+            let availableCoins = {};
+
+            for(let c in coins)
+            {
+                //sets only available coins
+                if(coins[c].addresses[network])
+                {
+                    availableCoins[c] = coins[c];
+                }
+            }
+
+            //sets the network and coins
             dispatchInputChanges({
                 type: CONTROLLER_SELECT_NETWORK,
-                payload: network || ''
+                payload: {network, coins: availableCoins}
             });
 
             // unsets coin if not available in network
@@ -155,21 +167,12 @@ export default class PaymentForm extends Component {
     render(){
 
         const {Wallet, Controllers, Config, pathAmount} = this.props;
-        const {amount, network, coin, appScreen} = Controllers;
-        const {networks, coins} = Config;
+        const {amount, network, coin, coins, appScreen} = Controllers;
+        const {networks} = Config;
         const invalidPathAmount = isInvalidAmountString(pathAmount);
-        const invalidAmount = isInvalidAmountString(amount);
-        const invalidNetwork = !networks.hasOwnProperty(network);
-        const invalidCoin = !coins.hasOwnProperty(coin);
+        const isInvalidAmount = isInvalidAmountString(amount);
         const walletAddress = (Wallet.data.hasOwnProperty('address')) ? Wallet.data.address : '';
         let availableCoins = Object.keys(coins);
-
-        if(network)
-        {
-            availableCoins = availableCoins
-                .filter(v => coins[v].addresses.hasOwnProperty(network) ? coins[v].addresses[network] ? true : false : false);
-        }
-
 
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);        
@@ -197,6 +200,7 @@ export default class PaymentForm extends Component {
                 <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
                     <FormLabel component="legend">{'Coins'}</FormLabel>
                     <RadioGroup
+                        disabled={!network}
                         aria-label="coin"
                         name="coin"
                         onChange={event => this.handleStablecoinSelect(event.target.value)}
@@ -205,14 +209,14 @@ export default class PaymentForm extends Component {
                         {
                            
                            availableCoins
-                            .map(v => <FormControlLabel key={v} value={v} disabled={invalidNetwork} control={<Radio />} label={coins[v].longName} />)
+                            .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].longName} />)
                         }
                     </RadioGroup>
                 </FormControl>
 
                 <TextField
+                    disabled={!coin || !network}
                     autoFocus={invalidPathAmount}
-                    disabled={invalidNetwork || invalidCoin}
                     sx={{mb: 3}}
                     fullWidth
                     id="amount"
@@ -222,15 +226,15 @@ export default class PaymentForm extends Component {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <img alt="paymentIcon" src={(invalidCoin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
+                                <img alt="paymentIcon" src={(!coin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
                             </InputAdornment>
                         )
                     }}
                     variant="filled"
                 />
                 
-                <Button 
-                    disabled={invalidAmount || invalidNetwork || invalidCoin} 
+                <Button
+                    disabled={!network || !coin || isInvalidAmount}
                     sx={{mb: 3}} 
                     type="button" 
                     fullWidth
@@ -299,7 +303,7 @@ export default class PaymentForm extends Component {
                     <RenderPaymentConfigComponent />
                 </> : ''}
 
-                {appScreen === 'app.payment.2' && !invalidAmount && !invalidNetwork && !invalidCoin ?  <>
+                {appScreen === 'app.payment.2' && network && coin && !isInvalidAmount ?  <>
                   <RenderPaymentConfirmationComponent />
                 </> : ''}
 
