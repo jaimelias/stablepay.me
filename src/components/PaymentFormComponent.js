@@ -19,6 +19,7 @@ import busdIcon from '../assets/svg/crypto/busd.svg';
 import binanceSmartChainIcon from '../assets/svg/crypto/binanceSmartChain.svg';
 import ethereumIcon from '../assets/svg/crypto/ethereum.svg';
 import polygonIcon from '../assets/svg/crypto/polygon.svg';
+import bitcoinIcon from '../assets/svg/crypto/btc.svg';
 import btcIcon from '../assets/svg/crypto/btc.svg';
 import ethIcon from '../assets/svg/crypto/eth.svg';
 import bnbIcon from '../assets/svg/crypto/bnb.svg';
@@ -32,7 +33,7 @@ import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
 import {RecipientAddressListItem, StepsComponent} from './appElements';
 
-const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
+const cryptoIcons = {bitcoinIcon, ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
@@ -88,6 +89,15 @@ export default class PaymentForm extends Component {
                 payload: {network, coins: availableCoins}
             });
 
+            //if there is only one coin in the network set is as default
+            if(Object.keys(availableCoins).length === 1)
+            {
+                dispatchInputChanges({
+                    type: CONTROLLER_SELECT_COIN,
+                    payload: networks[network].mainCoinCode || ''
+                });   
+            }
+
             // unsets coin if not available in network
             if(coins.hasOwnProperty(coin))
             {
@@ -119,7 +129,7 @@ export default class PaymentForm extends Component {
         const {coins} = Controllers
         const {networks} = Config;
 
-        if(coins.hasOwnProperty(coin))
+        if(coins[coin] && networks[network].explorer)
         {
             const explorerUrl = networks[network].explorer + coins[coin].addresses[network];
 
@@ -202,22 +212,26 @@ export default class PaymentForm extends Component {
                     </Select>
                 </FormControl>
 
-                <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
-                    <FormLabel component="legend">{'Coins'}</FormLabel>
-                    <RadioGroup
-                        disabled={!network}
-                        aria-label="coin"
-                        name="coin"
-                        onChange={event => this.handleStablecoinSelect(event.target.value)}
-                        value={coin}
-                        >
-                        {
-                           
-                           availableCoins
-                            .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].longName} />)
-                        }
-                    </RadioGroup>
-                </FormControl>
+
+                {(Object.keys(coins).length > 1) ? <>
+                    <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
+                        <FormLabel component="legend">{'Coins'}</FormLabel>
+                        <RadioGroup
+                            disabled={!network}
+                            aria-label="coin"
+                            name="coin"
+                            onChange={event => this.handleStablecoinSelect(event.target.value)}
+                            value={coin}
+                            >
+                            {
+                            
+                            availableCoins
+                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].longName} />)
+                            }
+                        </RadioGroup>
+                    </FormControl>                
+                </> : ''}
+ 
 
                 <TextField
                     disabled={!coin || !network}
@@ -277,13 +291,17 @@ export default class PaymentForm extends Component {
                             </ListItemAvatar>
                             <ListItemText primary={networks[network].longName} secondary={'Network'} />
                         </ListItem>
-                        <Divider variant="inset" component="li" />
-                        <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
-                            <ListItemAvatar>
-                                <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
-                            </ListItemAvatar>
-                            <ListItemText primary={coins[coin].longName} secondary={'Contract'} />
-                        </ListItem>
+
+                        {(networks[network].explorer) ? <>
+                            <Divider variant="inset" component="li" />
+                            <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
+                                <ListItemAvatar>
+                                    <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
+                                </ListItemAvatar>
+                                <ListItemText primary={coins[coin].longName} secondary={'Contract'} />
+                            </ListItem>                       
+                        </> : ''}
+
                         <Divider variant="inset" component="li" />
                         <RecipientAddressListItem 
                             walletAddress={walletAddress}
