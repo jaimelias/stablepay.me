@@ -3,14 +3,6 @@ import { PaymentConfigComponent } from './PaymentConfigComponent';
 import  {isValidAmountTyping, isInvalidAmountString, round, getRecipient} from '../utilities/utilities';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import ustdIcon from '../assets/svg/crypto/ustd.svg';
-import usdcIcon from '../assets/svg/crypto/usdc.svg';
-import busdIcon from '../assets/svg/crypto/busd.svg';
-import btcIcon from '../assets/svg/crypto/btc.svg';
-import ethIcon from '../assets/svg/crypto/eth.svg';
-import bnbIcon from '../assets/svg/crypto/bnb.svg';
-import maticIcon from '../assets/svg/crypto/matic.svg';
-import contractIcon from '../assets/svg/icons/contract.svg';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -20,8 +12,9 @@ import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
 import  {abbreviateAddress} from '../utilities/utilities';
 import {CopyListItem, StepsComponent} from './appElements';
+import { cryptoIcons, appIcons } from '../assets/svgIcons';
 
-const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
+const {contractIcon} = appIcons;
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 

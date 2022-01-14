@@ -8,19 +8,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import dollarIcon from '../assets/svg/icons/dollar.svg';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
-import ustdIcon from '../assets/svg/crypto/ustd.svg';
-import usdcIcon from '../assets/svg/crypto/usdc.svg';
-import busdIcon from '../assets/svg/crypto/busd.svg';
-import btcIcon from '../assets/svg/crypto/btc.svg';
-import ethIcon from '../assets/svg/crypto/eth.svg';
-import bnbIcon from '../assets/svg/crypto/bnb.svg';
-import maticIcon from '../assets/svg/crypto/matic.svg';
+import { cryptoIcons, appIcons } from '../assets/svgIcons';
 
-const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
+const {dollarIcon} = appIcons;
 
 export const PaymentConfigComponent = ({network, coin, amount, networks, coins, handleNetworkSelect, handleCoinSelect, handleAmountChange, handleOpenWalletConfirm}) => {
 
