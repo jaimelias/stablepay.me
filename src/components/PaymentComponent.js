@@ -1,18 +1,8 @@
 import React, {Component} from 'react';
+import { PaymentConfigComponent } from './PaymentConfigComponent';
 import  {isValidAmountTyping, isInvalidAmountString, round, getRecipient} from '../utilities/utilities';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import FormLabel from '@mui/material/FormLabel';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import dollarIcon from '../assets/svg/icons/dollar.svg';
 import ustdIcon from '../assets/svg/crypto/ustd.svg';
 import usdcIcon from '../assets/svg/crypto/usdc.svg';
 import busdIcon from '../assets/svg/crypto/busd.svg';
@@ -259,10 +249,8 @@ export default class Payment extends Component {
         const {Wallet, Controllers, Config} = this.props;
         const {amount, network, coin, coins, appScreen} = Controllers;
         const {networks} = Config;
-        const isInvalidAmount = (coin && network) ? isInvalidAmountString(amount) : true;
         const recipientWallet = (Wallet.status === 'ok') ? getRecipient({network, Wallet}) : {};
         const {address: recipientWalletAddress, memo: recipientWalletMemo} = recipientWallet || '';
-        let availableCoins = Object.keys(coins);
 
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
@@ -279,76 +267,9 @@ export default class Payment extends Component {
             }
         }
 
-        const RenderPaymentConfigComponent = () => (
-            <>
-                <FormControl fullWidth variant="filled" sx={{mb: 3}}>
-                    <InputLabel id="network-label">{'Network'}</InputLabel>
-                    <Select
-                        labelId="network-label"
-                        id="network"
-                        value={network}
-                        label={'Network'}
-                        onChange={event => this.handleNetworkSelect(event.target.value)}
-                        >
-                    {
-                        Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].name}</MenuItem>)
-                    }
-
-                    </Select>
-                </FormControl>
 
 
-                {(Object.keys(coins).length > 1) ? <>
-                    <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
-                        <FormLabel component="legend">{'Coins'}</FormLabel>
-                        <RadioGroup
-                            disabled={!network}
-                            aria-label="coin"
-                            name="coin"
-                            onChange={event => this.handleCoinSelect(event.target.value)}
-                            value={coin}
-                            >
-                            {
-                            
-                            availableCoins
-                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].name} />)
-                            }
-                        </RadioGroup>
-                    </FormControl>                
-                </> : ''}
- 
-
-                <TextField
-                    disabled={!coin || !network}
-                    sx={{mb: 3}}
-                    fullWidth
-                    id="amount"
-                    label={'Amount'}
-                    onChange={event => this.handleAmountChange(event.target.value)}
-                    value={amount || ''}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <img alt="paymentIcon" src={(!coin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
-                            </InputAdornment>
-                        )
-                    }}
-                    variant="filled"
-                />
-                
-                <Button
-                    disabled={!network || !coin || isInvalidAmount}
-                    sx={{mb: 3}} 
-                    type="button" 
-                    fullWidth
-                    onClick={() => this.handleOpenWalletConfirm()}
-                    variant="contained">{'Next'}</Button>
-
-                
-            </>
-        );
-
-        const RenderPaymentConfirmationComponent = () => {
+        const PaymentConfirmationComponent = () => {
 
             return (
                 <>
@@ -413,11 +334,21 @@ export default class Payment extends Component {
                 </Box>                
 
                 {appScreen === 'app.payment.1' ? <>
-                    <RenderPaymentConfigComponent />
+                    <PaymentConfigComponent
+                        network={network}
+                        coin={coin}
+                        amount={amount}
+                        networks={networks}
+                        coins={coins}
+                        handleNetworkSelect={this.handleNetworkSelect}
+                        handleCoinSelect={this.handleCoinSelect}
+                        handleAmountChange={this.handleAmountChange}
+                        handleOpenWalletConfirm={this.handleOpenWalletConfirm}
+                    />
                 </> : ''}
 
                 {appScreen === 'app.payment.2' ?  <>
-                  <RenderPaymentConfirmationComponent />
+                  <PaymentConfirmationComponent />
                 </> : ''}
 
             </>
