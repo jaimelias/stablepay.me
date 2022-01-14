@@ -17,11 +17,11 @@ const store = ConfigureStore();
 const theme = createTheme(themeConfig);
 
 export const App = () => {
-	const {walletPath, amount} = useParams();
+	const {walletPath, networkPath, coinPath, amount} = useParams();
 
 	const MainComponent = () => (
 		<Provider store={store}>
-			<Main walletPath={walletPath}  pathAmount={amount} />
+			<Main walletPath={walletPath} networkPath={networkPath} coinPath={coinPath} amountPath={amount} />
 		</Provider>
 	);
 

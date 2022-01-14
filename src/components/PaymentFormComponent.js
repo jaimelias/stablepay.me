@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import  {isValidAmountTyping, isInvalidAmountString} from '../utilities/utilities';
+import  {isValidAmountTyping, isInvalidAmountString, round} from '../utilities/utilities';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
@@ -16,10 +16,6 @@ import dollarIcon from '../assets/svg/icons/dollar.svg';
 import ustdIcon from '../assets/svg/crypto/ustd.svg';
 import usdcIcon from '../assets/svg/crypto/usdc.svg';
 import busdIcon from '../assets/svg/crypto/busd.svg';
-import binanceSmartChainIcon from '../assets/svg/crypto/binanceSmartChain.svg';
-import ethereumIcon from '../assets/svg/crypto/ethereum.svg';
-import polygonIcon from '../assets/svg/crypto/polygon.svg';
-import bitcoinIcon from '../assets/svg/crypto/btc.svg';
 import btcIcon from '../assets/svg/crypto/btc.svg';
 import ethIcon from '../assets/svg/crypto/eth.svg';
 import bnbIcon from '../assets/svg/crypto/bnb.svg';
@@ -33,7 +29,7 @@ import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
 import {RecipientAddressListItem, StepsComponent} from './appElements';
 
-const cryptoIcons = {bitcoinIcon, ustdIcon, usdcIcon, busdIcon, binanceSmartChainIcon, ethereumIcon, polygonIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
+const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
@@ -43,7 +39,7 @@ export default class PaymentForm extends Component {
         super(props);
         this.handleAmountChange = this.handleAmountChange.bind(this);
         this.handleNetworkSelect = this.handleNetworkSelect.bind(this);
-        this.handleStablecoinSelect = this.handleStablecoinSelect.bind(this);
+        this.handleCoinSelect = this.handleCoinSelect.bind(this);
         this.handleOpenExplorer = this.handleOpenExplorer.bind(this);
         this.handleOpenWalletConfirm = this.handleOpenWalletConfirm.bind(this);
         this.handleGoBack = this.handleGoBack.bind(this);
@@ -94,7 +90,7 @@ export default class PaymentForm extends Component {
             {
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_COIN,
-                    payload: networks[network].mainCoinCode || ''
+                    payload: network || ''
                 });   
             }
 
@@ -112,7 +108,7 @@ export default class PaymentForm extends Component {
         }
     }
 
-    handleStablecoinSelect(coin){
+    handleCoinSelect(coin){
         const {dispatchInputChanges, Controllers} = this.props;
         const {coins} = Controllers;
         if(coins.hasOwnProperty(coin) || coin === '')
@@ -140,13 +136,16 @@ export default class PaymentForm extends Component {
     handleOpenWalletConfirm()
     {
         const {Controllers, dispatchInputChanges} = this.props;
-        const {amount} = Controllers;
+        let {amount, coins, coin} = Controllers;
+        const decimals = coins[coin].decimals;
 
         if(isValidAmountTyping(amount))
         {
+            amount = round({val: amount, precision: decimals});
+
             dispatchInputChanges({
                 type: CONTROLLER_CHANGE_AMOUNT,
-                payload: parseFloat(amount).toFixed(2).toString() || ''
+                payload: amount.toString() || ''
             });
 
             dispatchInputChanges({
@@ -167,30 +166,117 @@ export default class PaymentForm extends Component {
     }
 
     componentDidMount(){
-        const {pathAmount, dispatchInputChanges} = this.props;
-        const invalidAmountString = isInvalidAmountString(pathAmount);
-        
-        if(!invalidAmountString)
+        const {amountPath, networkPath, coinPath, dispatchInputChanges, Config} = this.props;
+        const {networks, coins} = Config;
+
+        let network = '';
+        let coin = '';
+        let amount = '';
+
+        if(networkPath)
         {
-            dispatchInputChanges({
-                type: CONTROLLER_CHANGE_AMOUNT,
-                payload: parseFloat(pathAmount).toFixed(2).toString() || ''
-            });
+            for(let n in networks)
+            {
+                if(n === networkPath)
+                {
+                    network = n;
+                }
+            }
+
+            if(network)
+            {
+                let availableCoins = {};
+
+                for(let c in coins)
+                {
+                    //sets only available coins
+                    if(coins[c].addresses[network])
+                    {
+                        availableCoins[c] = coins[c];
+                    }
+                }
+
+
+                if(coins.hasOwnProperty(coinPath))
+                {
+                    coin = coinPath;
+
+                    if(!isInvalidAmountString(amountPath))
+                    {
+                        amount = amountPath
+                    }
+                }
+                else if(!coinPath && !isInvalidAmountString(amountPath))
+                {
+                    amount = amountPath;
+
+                    if(coins.hasOwnProperty(networkPath))
+                    {
+                        coin = networkPath;
+                    }
+                }
+
+                if(network && coin && amount)
+                {
+                    if(coins.hasOwnProperty(coin))
+                    {
+                        if(coins[coin].addresses.hasOwnProperty(network))
+                        {
+                            const decimals = coins[coin].decimals;
+                            amount = round({val: amount, precision: decimals});
+
+                            dispatchInputChanges({
+                                type: CONTROLLER_SELECT_NETWORK,
+                                payload: {network, coins: availableCoins}
+                            });
+                            
+                            dispatchInputChanges({
+                                type: CONTROLLER_SELECT_COIN,
+                                payload: coin || ''
+                            });
+                            
+                            dispatchInputChanges({
+                                type: CONTROLLER_CHANGE_AMOUNT,
+                                payload: amount.toString() || ''
+                            });
+
+                            dispatchInputChanges({
+                                type: CONTROLLER_CHANGE_APP_SCREEN,
+                                payload: 'app.payment.2'
+                            });
+
+                            return;
+                        }
+                    }                 
+                }
+            }            
         }
     }
 
     render(){
 
-        const {Wallet, Controllers, Config, pathAmount} = this.props;
+        const {Wallet, Controllers, Config, amountPath} = this.props;
         const {amount, network, coin, coins, appScreen} = Controllers;
         const {networks} = Config;
-        const invalidPathAmount = isInvalidAmountString(pathAmount);
+        const invalidPathAmount = isInvalidAmountString(amountPath);
         const isInvalidAmount = isInvalidAmountString(amount);
         const walletAddress = (Wallet.data.hasOwnProperty('address')) ? Wallet.data.address : '';
         let availableCoins = Object.keys(coins);
 
         const appScreenArr = appScreen.split('.');
-        const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);        
+        const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
+        
+        let explorerBtnAttr = false;
+        let explorerOnClick = () => true;
+
+        if(coin && network)
+        {
+            if(coins[coin].addresses[network] !== true)
+            {
+                explorerBtnAttr = true;
+                explorerOnClick = () => this.handleOpenExplorer({coin, network});
+            }
+        }
 
         const RenderPaymentConfigComponent = () => (
             <>
@@ -206,7 +292,7 @@ export default class PaymentForm extends Component {
                         onChange={event => this.handleNetworkSelect(event.target.value)}
                         >
                     {
-                        Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].longName}</MenuItem>)
+                        Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].name}</MenuItem>)
                     }
 
                     </Select>
@@ -220,13 +306,13 @@ export default class PaymentForm extends Component {
                             disabled={!network}
                             aria-label="coin"
                             name="coin"
-                            onChange={event => this.handleStablecoinSelect(event.target.value)}
+                            onChange={event => this.handleCoinSelect(event.target.value)}
                             value={coin}
                             >
                             {
                             
                             availableCoins
-                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].longName} />)
+                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].name} />)
                             }
                         </RadioGroup>
                     </FormControl>                
@@ -277,32 +363,25 @@ export default class PaymentForm extends Component {
                         bgcolor: 'background.paper',
                         }}
                     >
-
-                        <ListItem>
+                        <Divider variant="inset" component="li" />
+                        <ListItem button={explorerBtnAttr} onClick={() => explorerOnClick()}>
                             <ListItemAvatar>
-                                <img src={dollarIcon} alt="amount" width="40" height="40" />
+                                <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
                             </ListItemAvatar>
-                            <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={'Amount'} />
-                        </ListItem> 
-                        <Divider variant="inset" component="li" />                      
+                            <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={coins[coin].name} />
+                        </ListItem>  
+                        
+                        <Divider variant="inset" component="li" />
+
                         <ListItem>
                             <ListItemAvatar>
                                 <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
                             </ListItemAvatar>
-                            <ListItemText primary={networks[network].longName} secondary={'Network'} />
+                            <ListItemText primary={networks[network].name} secondary={'Network'} />
                         </ListItem>
 
-                        {(networks[network].explorer) ? <>
-                            <Divider variant="inset" component="li" />
-                            <ListItem button onClick={()=> this.handleOpenExplorer({coin, network})}>
-                                <ListItemAvatar>
-                                    <img src={cryptoIcons[`${coin}Icon`]} alt={coin}  width="40" height="40"/>
-                                </ListItemAvatar>
-                                <ListItemText primary={coins[coin].longName} secondary={'Contract'} />
-                            </ListItem>                       
-                        </> : ''}
-
                         <Divider variant="inset" component="li" />
+
                         <RecipientAddressListItem 
                             walletAddress={walletAddress}
                             recipientAddressLabel={'Recipient Address'}

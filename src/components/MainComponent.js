@@ -26,7 +26,7 @@ class Main extends Component {
 	}
 	render() {
 
-		const {Controllers, Wallet, walletPath, pathAmount, dispatchInputChanges} = this.props;
+		const {Controllers, Wallet, walletPath, networkPath, coinPath, amountPath, dispatchInputChanges} = this.props;
 
 		return (
 			<>
@@ -39,7 +39,9 @@ class Main extends Component {
 							<PaymentForm 
 								Controllers={Controllers} 
 								Wallet={Wallet}
-								pathAmount={pathAmount} 
+								amountPath={amountPath} 
+								networkPath={networkPath} 
+								coinPath={coinPath} 
 								dispatchInputChanges={dispatchInputChanges} 
 								Config={Config}
 								/>

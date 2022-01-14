@@ -13,7 +13,8 @@ ReactDOM.render(
       <Routes>
         <Route index element={<HomePage />} />
         <Route path=":walletPath" element={<App />} />
-        <Route path=":walletPath/:amount" element={<App />} />
+        <Route path=":walletPath/:networkPath/:amount" element={<App />} />
+        <Route path=":walletPath/:networkPath/:coinPath/:amount" element={<App />} />
       </Routes>
     </BrowserRouter>
   ,
