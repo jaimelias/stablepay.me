@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import  {fetchWallet, dispatchInputChanges} from '../redux/actionCreators';
-import PaymentForm from './PaymentFormComponent';
+import Payment from './PaymentComponent';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -36,7 +36,7 @@ class Main extends Component {
 					
 					{Wallet.status === 'ok' ?	
 						<>
-							<PaymentForm 
+							<Payment 
 								Controllers={Controllers} 
 								Wallet={Wallet}
 								amountPath={amountPath} 

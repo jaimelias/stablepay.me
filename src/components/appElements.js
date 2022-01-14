@@ -1,5 +1,4 @@
 import React from 'react';
-import  {abbreviateAddress} from '../utilities/utilities';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -9,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import MuiAlert from '@mui/material/Alert';
-import contractIcon from '../assets/svg/icons/contract.svg';
+
 import { coins } from '../assets/config';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -28,11 +27,11 @@ export const DisplayStableLogos = () => {
     );
 };
 
-export const RecipientAddressListItem = ({walletAddress, recipientAddressLabel, successMessage}) => {
+export const CopyListItem = ({copyThis, label, message, image, labelSanitizer}) => {
     const [open, setOpen] = React.useState(false);
   
-    const handleCopyRecipientAddress = walletAddress => {
-        navigator.clipboard.writeText(walletAddress)
+    const handleCopy = copyThis => {
+        navigator.clipboard.writeText(copyThis)
         setOpen(true);
     };
   
@@ -43,37 +42,40 @@ export const RecipientAddressListItem = ({walletAddress, recipientAddressLabel, 
   
       setOpen(false);
     };
-  
 
+    if(labelSanitizer)
+    {
+      copyThis = labelSanitizer(copyThis);
+    }
   
     return (
         <>
-            <ListItem button onClick={()=> handleCopyRecipientAddress(walletAddress)}>
+            <ListItem button onClick={()=> handleCopy(copyThis)}>
                 <ListItemAvatar>
-                <img src={contractIcon} alt="contract" width="40" height="40" />
+                <img src={image} alt="contract" width="40" height="40" />
                 </ListItemAvatar>
-                <ListItemText primary={abbreviateAddress(walletAddress)} secondary={recipientAddressLabel} />
+                <ListItemText primary={copyThis} secondary={label} />
             </ListItem>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    {successMessage}
+                    {message}
                 </Alert>
             </Snackbar>
         </>
     );
   }
 
-  export const StepsComponent = ({steps, appScreenNumber}) => {
+export const StepsComponent = ({steps, appScreenNumber}) => {
 
-    return (
-        <Box sx={{ width: '100%' }}>
-          <Stepper activeStep={appScreenNumber} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Box>
-      );
-  };
+  return (
+      <Box sx={{ width: '100%' }}>
+        <Stepper activeStep={appScreenNumber} alternativeLabel>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+    );
+};

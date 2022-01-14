@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import  {isValidAmountTyping, isInvalidAmountString, round} from '../utilities/utilities';
+import  {isValidAmountTyping, isInvalidAmountString, round, getRecipient} from '../utilities/utilities';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import Button from '@mui/material/Button';
@@ -20,6 +20,7 @@ import btcIcon from '../assets/svg/crypto/btc.svg';
 import ethIcon from '../assets/svg/crypto/eth.svg';
 import bnbIcon from '../assets/svg/crypto/bnb.svg';
 import maticIcon from '../assets/svg/crypto/matic.svg';
+import contractIcon from '../assets/svg/icons/contract.svg';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -27,13 +28,14 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
-import {RecipientAddressListItem, StepsComponent} from './appElements';
+import  {abbreviateAddress} from '../utilities/utilities';
+import {CopyListItem, StepsComponent} from './appElements';
 
 const cryptoIcons = {ustdIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, maticIcon};
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
-export default class PaymentForm extends Component {
+export default class Payment extends Component {
 
     constructor(props){
         super(props);
@@ -166,6 +168,7 @@ export default class PaymentForm extends Component {
     }
 
     componentDidMount(){
+
         const {amountPath, networkPath, coinPath, dispatchInputChanges, Config} = this.props;
         const {networks, coins} = Config;
 
@@ -244,8 +247,6 @@ export default class PaymentForm extends Component {
                                 type: CONTROLLER_CHANGE_APP_SCREEN,
                                 payload: 'app.payment.2'
                             });
-
-                            return;
                         }
                     }                 
                 }
@@ -255,12 +256,12 @@ export default class PaymentForm extends Component {
 
     render(){
 
-        const {Wallet, Controllers, Config, amountPath} = this.props;
+        const {Wallet, Controllers, Config} = this.props;
         const {amount, network, coin, coins, appScreen} = Controllers;
         const {networks} = Config;
-        const invalidPathAmount = isInvalidAmountString(amountPath);
-        const isInvalidAmount = isInvalidAmountString(amount);
-        const walletAddress = (Wallet.data.hasOwnProperty('address')) ? Wallet.data.address : '';
+        const isInvalidAmount = (coin && network) ? isInvalidAmountString(amount) : true;
+        const recipientWallet = (Wallet.status === 'ok') ? getRecipient({network, Wallet}) : {};
+        const {address: recipientWalletAddress, memo: recipientWalletMemo} = recipientWallet || '';
         let availableCoins = Object.keys(coins);
 
         const appScreenArr = appScreen.split('.');
@@ -280,8 +281,6 @@ export default class PaymentForm extends Component {
 
         const RenderPaymentConfigComponent = () => (
             <>
-              
-
                 <FormControl fullWidth variant="filled" sx={{mb: 3}}>
                     <InputLabel id="network-label">{'Network'}</InputLabel>
                     <Select
@@ -321,7 +320,6 @@ export default class PaymentForm extends Component {
 
                 <TextField
                     disabled={!coin || !network}
-                    autoFocus={invalidPathAmount}
                     sx={{mb: 3}}
                     fullWidth
                     id="amount"
@@ -382,11 +380,24 @@ export default class PaymentForm extends Component {
 
                         <Divider variant="inset" component="li" />
 
-                        <RecipientAddressListItem 
-                            walletAddress={walletAddress}
-                            recipientAddressLabel={'Recipient Address'}
-                            successMessage={'Recipient address copied to clipboard!'}
+                        <CopyListItem 
+                            copyThis={recipientWalletAddress}
+                            labelSanitizer={abbreviateAddress}
+                            label={'Recipient Address'}
+                            message={'Recipient address copied to clipboard!'}
+                            image={contractIcon}
                             />
+
+                        {recipientWalletMemo ? <>
+                            <Divider variant="inset" component="li" />
+
+                            <CopyListItem 
+                                copyThis={recipientWalletMemo}
+                                label={'Memo'}
+                                message={'Memo copied to clipboard!'}
+                                image={contractIcon}
+                                />                        
+                        </> : ''}
                        
                     </List>
                     <Button onClick={() => this.handleGoBack()}><Typography variant="h5">&#8592;</Typography></Button>
@@ -401,11 +412,11 @@ export default class PaymentForm extends Component {
                   <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
                 </Box>                
 
-                {appScreen === 'app.payment.1'? <>
+                {appScreen === 'app.payment.1' ? <>
                     <RenderPaymentConfigComponent />
                 </> : ''}
 
-                {appScreen === 'app.payment.2' && network && coin && !isInvalidAmount ?  <>
+                {appScreen === 'app.payment.2' ?  <>
                   <RenderPaymentConfirmationComponent />
                 </> : ''}
 
