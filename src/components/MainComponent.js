@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
 class Main extends Component {
 
 	componentDidMount() {
-		setTimeout(() => this.props.fetchWallet(), 3000);
+		setTimeout(() => this.props.fetchWallet(), 1000);
 	}
 	render() {
 
