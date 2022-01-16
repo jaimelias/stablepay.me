@@ -16,13 +16,13 @@ export const getRecipient = ({network, Wallet}) => {
 
     if(data && network)
     {
-        const {walletNetwork, walletData} = data;
+        const {network: walletNetwork, data: walletData} = data;
 
         if(typeof walletNetwork === 'string' && typeof walletData === 'object')
         {
-            if(Wallet.data.walletData.hasOwnProperty(network))
+            if(walletData.hasOwnProperty(network))
             {
-                recipient = Wallet.data.walletData[network];
+                recipient = walletData[network];
             }
         }
     }

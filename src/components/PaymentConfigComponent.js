@@ -68,25 +68,23 @@ export default class PaymentConfigComponent extends Component {
                 payload: {network, coins: availableCoins}
             });
 
-            //if there is only one coin in the network set is as default
-            if(Object.keys(availableCoins).length === 1)
+             // unsets coin if not available in network
+            if(!availableCoins.hasOwnProperty(coin))
             {
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_COIN,
-                    payload: network || ''
-                });   
-            }
+                    payload: ''
+                });
 
-            // unsets coin if not available in network
-            if(coins.hasOwnProperty(coin))
-            {
-                if(!coins[coin].addresses[network])
+                
+                //if there is only one coin in the network set is as default
+                if(availableCoins.hasOwnProperty(network))
                 {
                     dispatchInputChanges({
                         type: CONTROLLER_SELECT_COIN,
-                        payload: ''
-                    });
-                }
+                        payload: network || ''
+                    }); 
+                }                
             }
         }
     }

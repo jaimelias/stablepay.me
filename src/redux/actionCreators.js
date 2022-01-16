@@ -1,13 +1,15 @@
 import  * as actionTypes from './actionTypes';
 
 const testAccount = {
-    walletNetwork: 'eth',
-    walletName: 'jaimelias',
-    walletActions: {
+    network: 'eth',
+    name: 'jaimelias',
+    settings: {
         disableGoBackButton: true,
-        allowMainCoins: false
+        allowMainCoins: false,
+        callbackURL: '',
+        webookUrl: ''
     },
-    walletData: {
+    data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
             availableCoins: ['usdt', 'usdc']

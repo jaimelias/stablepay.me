@@ -3,6 +3,7 @@ import * as actionTypes from './actionTypes';
 export const Wallet = (state = {
     status: 'loading',
     errMess: '',
+    attempt: 1,
     data: {}
 }, action) => {
     switch (action.type)
