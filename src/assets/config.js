@@ -2,25 +2,25 @@
 export const networks = {
 	btc: {
 		name: 'Bitcoin (BTC)',
-		mainCoinCode: 'btc'
+		mainCoin: 'btc'
 	},	
 	eth: {
 		name: 'Ethereum (ERC-20)',
 		chainId: 1,
 		explorer: 'https://etherscan.io/token/',
-		mainCoinCode: 'eth'
+		mainCoin: 'eth'
 	},
 	bnb: {
 		name: 'Binance Smart Chain (BEP-20)',
 		chainId: 56,
 		explorer: 'https://bscscan.com/token/',
-		mainCoinCode: 'bnb'
+		mainCoin: 'bnb'
 	},
 	matic: {
 		name: 'Polygon (MATIC)',
 		chainId: 137,
 		explorer: 'https://polygonscan.com/token/',
-		mainCoinCode: 'matic'
+		mainCoin: 'matic'
 	}
 };
 
@@ -53,7 +53,7 @@ export const coins = {
 				matic: true
 		}
 	},
-	ustd: {
+	usdt: {
 			name: 'Tether (USTD)',
 			decimals: 6,
 			addresses: {

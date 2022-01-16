@@ -3,18 +3,22 @@ import  * as actionTypes from './actionTypes';
 const testAccount = {
     walletNetwork: 'eth',
     walletName: 'jaimelias',
+    walletActions: {
+        disableGoBackButton: true,
+        allowMainCoins: false
+    },
     walletData: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['ustd', 'usdc']
+            availableCoins: ['usdt', 'usdc']
         },
         bnb: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['ustd', 'usdc']
+            availableCoins: ['usdt', 'usdc']
         },
         matic: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['ustd', 'usdc']
+            availableCoins: ['usdt', 'usdc']
         },
         btc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',

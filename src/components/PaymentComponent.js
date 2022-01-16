@@ -42,6 +42,10 @@ export default class Payment extends Component {
                     }
                 }
 
+                dispatchInputChanges({
+                    type: CONTROLLER_SELECT_NETWORK,
+                    payload: {network, coins: availableCoins}
+                });
 
                 if(coins.hasOwnProperty(coinPath))
                 {
@@ -71,10 +75,6 @@ export default class Payment extends Component {
                             const decimals = coins[coin].decimals;
                             amount = round({val: amount, precision: decimals});
 
-                            dispatchInputChanges({
-                                type: CONTROLLER_SELECT_NETWORK,
-                                payload: {network, coins: availableCoins}
-                            });
                             
                             dispatchInputChanges({
                                 type: CONTROLLER_SELECT_COIN,
