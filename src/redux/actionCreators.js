@@ -4,6 +4,10 @@ const testAccount = {
     network: 'eth',
     name: 'jaimelias',
     settings: {
+        theme: {
+            backgroundColor: 'dark',
+            actionColor: '#ffcc00',
+        },
         disableGoBackButton: true,
         allowMainCoins: false,
         callbackURL: '',
@@ -12,15 +16,15 @@ const testAccount = {
     data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['usdt', 'usdc']
+            coins: ['usdt', 'usdc']
         },
         bnb: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['usdt', 'usdc']
+            coins: ['usdt', 'usdc']
         },
         matic: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            availableCoins: ['usdt', 'usdc']
+            coins: ['usdt', 'usdc']
         },
         btc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',

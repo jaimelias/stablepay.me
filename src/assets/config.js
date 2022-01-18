@@ -1,5 +1,16 @@
 
 export const networks = {
+	ada: {
+		name: 'Cardano (ADA)',
+		explorer: 'https://cardanoscan.io/token/',
+		mainCoin: 'ada'		
+	},
+	bnb: {
+		name: 'Binance Smart Chain (BEP-20)',
+		chainId: 56,
+		explorer: 'https://bscscan.com/token/',
+		mainCoin: 'bnb'
+	},	
 	btc: {
 		name: 'Bitcoin (BTC)',
 		mainCoin: 'btc'
@@ -10,33 +21,25 @@ export const networks = {
 		explorer: 'https://etherscan.io/token/',
 		mainCoin: 'eth'
 	},
-	bnb: {
-		name: 'Binance Smart Chain (BEP-20)',
-		chainId: 56,
-		explorer: 'https://bscscan.com/token/',
-		mainCoin: 'bnb'
-	},
 	matic: {
 		name: 'Polygon (MATIC)',
 		chainId: 137,
 		explorer: 'https://polygonscan.com/token/',
 		mainCoin: 'matic'
+	},
+	sol: {
+		name: 'Solana (SOL)',
+		explorer: 'https://solscan.io/token/',
+		mainCoin: 'sol'		
 	}
 };
 
 export const coins = {
-	btc: {
-			name: 'Bitcoin (BTC)',
-			decimals: 8,
-			addresses: {
-				btc: true
-		}
-	},
-	eth: {
-			name: 'Ethereum (ETH)',
+	ada: {
+			name: 'Cardano (ADA)',
 			decimals: 18,
 			addresses: {
-				eth: true
+				ada: true
 		}
 	},
 	bnb: {
@@ -46,6 +49,13 @@ export const coins = {
 				bnb: true
 		}
 	},
+	btc: {
+			name: 'Bitcoin (BTC)',
+			decimals: 8,
+			addresses: {
+				btc: true
+		}
+	},
 	matic: {
 			name: 'Poligon (MATIC)',
 			decimals: 18,
@@ -53,22 +63,18 @@ export const coins = {
 				matic: true
 		}
 	},
-	usdt: {
-			name: 'Tether (USTD)',
+	sol: {
+			name: 'Solana (SOL)',
 			decimals: 6,
 			addresses: {
-				bnb: '0x55d398326f99059ff775485246999027b3197955',
-				eth: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-				matic: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f'
+				sol: true
 		}
 	},
-	usdc: {
-			name: 'USD Coin (USDC)',
-			decimals: 6,
+	eth: {
+			name: 'Ethereum (ETH)',
+			decimals: 18,
 			addresses: {
-				bnb: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
-				eth: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-				matic: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174'
+				eth: true
 		}
 	},
 	busd: {
@@ -77,6 +83,26 @@ export const coins = {
 			addresses: {
 				bnb: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
 				eth: '0x4Fabb145d64652a948d72533023f6E7A623C7C53'
+		}
+	},
+	usdt: {
+			name: 'Tether (USTD)',
+			decimals: 6,
+			addresses: {
+				bnb: '0x55d398326f99059ff775485246999027b3197955',
+				eth: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+				matic: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+				sol: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB'
+		}
+	},
+	usdc: {
+			name: 'USD Coin (USDC)',
+			decimals: 6,
+			addresses: {
+				bnb: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
+				eth: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+				matic: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
+				sol: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 		}
 	}
 };
