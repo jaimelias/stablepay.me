@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PaymentConfigComponent from './PaymentConfigComponent';
 import PaymentConfirmationComponent from './PaymentConfirmComponent';
-import  {isInvalidAmountString, round} from '../utilities/utilities';
+import  {filterCoins, isInvalidAmountString, round} from '../utilities/utilities';
 import {StepsComponent} from './appElements';
 import Box from '@mui/material/Box';
 import * as actionTypes from '../redux/actionTypes';
@@ -12,7 +12,7 @@ export default class Payment extends Component {
 
     componentDidMount(){
 
-        const {amountPath, networkPath, coinPath, dispatchInputChanges, Config} = this.props;
+        const {amountPath, networkPath, coinPath, dispatchInputChanges, Config, Wallet} = this.props;
         const {networks, coins} = Config;
 
         let network = '';
@@ -31,16 +31,7 @@ export default class Payment extends Component {
 
             if(network)
             {
-                let availableCoins = {};
-
-                for(let c in coins)
-                {
-                    //sets only available coins
-                    if(coins[c].addresses[network])
-                    {
-                        availableCoins[c] = coins[c];
-                    }
-                }
+                let availableCoins = filterCoins({Wallet, network, coins});
 
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_NETWORK,
@@ -115,6 +106,7 @@ export default class Payment extends Component {
                     <PaymentConfigComponent
                         dispatchInputChanges={dispatchInputChanges}
                         Controllers={Controllers}
+                        Wallet={Wallet}
                         Config={Config}
                     />
                 </> : ''}

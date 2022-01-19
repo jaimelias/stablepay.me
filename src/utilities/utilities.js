@@ -20,7 +20,7 @@ export const getRecipient = ({network, Wallet}) => {
 
         if(typeof walletNetwork === 'string' && typeof walletData === 'object')
         {
-            if(walletData.hasOwnProperty(network))
+            if(walletData[network])
             {
                 recipient = walletData[network];
             }
@@ -28,4 +28,47 @@ export const getRecipient = ({network, Wallet}) => {
     }
 
     return recipient;
+};
+
+export const filterCoins = ({Wallet, coins, network}) => filterCoinsByWallet({Wallet, coins: filterCoinsByNetwork({coins, network}), network});
+
+
+export const filterCoinsByNetwork = ({coins, network}) => {
+    let output = {}
+
+    for(let c in coins)
+    {
+        if(coins[c].addresses[network])
+        {
+            output[c] = coins[c];
+        }
+    }
+
+    return output;
+};
+
+export const filterCoinsByWallet = ({Wallet, coins, network}) => {
+    const {data} = Wallet;
+    let output = {};
+
+    if(typeof data === 'object')
+    {
+        const {data: walletData} = data;
+
+        if(typeof walletData === 'object')
+        {
+            for(let c in coins)
+            {
+                if(walletData[network])
+                {
+                    if(walletData[network].coins.includes(c))
+                    {
+                        output[c] = coins[c];
+                    }
+                }
+            }            
+        }
+    }
+
+    return output;
 };

@@ -1,5 +1,5 @@
 import React, {Component}  from 'react';
-import  {isInvalidAmountString, isValidAmountTyping, round} from '../utilities/utilities';
+import  {isInvalidAmountString, isValidAmountTyping, round, filterCoins} from '../utilities/utilities';
 import * as actionTypes from '../redux/actionTypes';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -44,23 +44,14 @@ export default class PaymentConfigComponent extends Component {
     };
 
     handleNetworkSelect(network){
-        const {dispatchInputChanges, Config, Controllers} = this.props;
+        const {dispatchInputChanges, Config, Controllers, Wallet} = this.props;
         let {coin} = Controllers;
         const {networks, coins} = Config;
 
         if(networks.hasOwnProperty(network))
         {
 
-            let availableCoins = {};
-
-            for(let c in coins)
-            {
-                //sets only available coins
-                if(coins[c].addresses[network])
-                {
-                    availableCoins[c] = coins[c];
-                }
-            }
+            let availableCoins = filterCoins({Wallet, coins, network});
 
             //sets the network and coins
             dispatchInputChanges({
