@@ -27,20 +27,11 @@ export const DisplayStableLogos = () => {
     );
 };
 
-export const CopyListItem = ({copyThis, label, message, image, labelSanitizer}) => {
-    const [open, setOpen] = React.useState(false);
+export const CopyListItem = ({copyThis, label, message, image, labelSanitizer, updateNotification}) => {
   
     const handleCopy = copyThis => {
         navigator.clipboard.writeText(copyThis)
-        setOpen(true);
-    };
-  
-    const handleClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-  
-      setOpen(false);
+        updateNotification({open: true, message})
     };
 
     if(labelSanitizer)
@@ -56,14 +47,31 @@ export const CopyListItem = ({copyThis, label, message, image, labelSanitizer}) 
                 </ListItemAvatar>
                 <ListItemText primary={copyThis} secondary={label} />
             </ListItem>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    {message}
-                </Alert>
-            </Snackbar>
+
         </>
     );
-  }
+}
+
+export const NotificationComponent = ({updateNotification, notification}) => {
+
+	const {open, message} = notification;
+
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+	  
+      updateNotification({open: false, message: ''})
+    };
+
+	return(
+		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+			<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+				{message}
+			</Alert>
+		</Snackbar>	
+	);
+};
 
 export const StepsComponent = ({steps, appScreenNumber}) => {
 

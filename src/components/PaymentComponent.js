@@ -12,12 +12,16 @@ export default class Payment extends Component {
 
     componentDidMount(){
 
-        const {amountPath, networkPath, coinPath, dispatchInputChanges, Config, Wallet} = this.props;
+        const { dispatchInputChanges, Config, Wallet} = this.props;
         const {networks, coins} = Config;
-
+		let {amountPath, networkPath, coinPath} = this.props;
         let network = '';
         let coin = '';
         let amount = '';
+		
+		amountPath = (amountPath) ? amountPath : '';
+		networkPath = (networkPath) ? networkPath : '';
+		coinPath = (coinPath) ? coinPath : '';
 
         if(networkPath)
         {
@@ -41,24 +45,30 @@ export default class Payment extends Component {
                 if(coins.hasOwnProperty(coinPath))
                 {
                     coin = coinPath;
-
-                    if(!isInvalidAmountString(amountPath))
-                    {
-                        amount = amountPath
-                    }
                 }
-                else if(!coinPath && !isInvalidAmountString(amountPath))
+				
+               if(!coinPath)
                 {
-                    amount = amountPath;
-
                     if(coins.hasOwnProperty(networkPath))
                     {
+						
+						console.log({networkPath, coinPath, amountPath});
+						
                         coin = networkPath;
                     }
                 }
+				
+				if(!isInvalidAmountString(amountPath))
+				{
+					amount = amountPath;
+				}
+				
+				
 
-                if(network && coin && amount)
+                if(network && coin)
                 {
+					console.log({network, coin, amount});
+					
                     if(coins.hasOwnProperty(coin))
                     {
                         if(coins[coin].addresses.hasOwnProperty(network))
@@ -72,15 +82,18 @@ export default class Payment extends Component {
                                 payload: coin || ''
                             });
                             
-                            dispatchInputChanges({
-                                type: CONTROLLER_CHANGE_AMOUNT,
-                                payload: amount.toString() || ''
-                            });
+							if(amount)
+							{
+								dispatchInputChanges({
+									type: CONTROLLER_CHANGE_AMOUNT,
+									payload: amount.toString() || ''
+								});	
 
-                            dispatchInputChanges({
-                                type: CONTROLLER_CHANGE_APP_SCREEN,
-                                payload: 'app.payment.2'
-                            });
+								dispatchInputChanges({
+									type: CONTROLLER_CHANGE_APP_SCREEN,
+									payload: 'app.payment.2'
+								});						
+							}
                         }
                     }                 
                 }
@@ -90,7 +103,7 @@ export default class Payment extends Component {
 
     render(){
 
-        const {Wallet, Controllers, Config, dispatchInputChanges} = this.props;
+        const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification} = this.props;
         const {appScreen} = Controllers;
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
@@ -117,6 +130,7 @@ export default class Payment extends Component {
                     Controllers={Controllers}
                     Wallet={Wallet}
                     Config={Config}
+					updateNotification={updateNotification}
                   />
                 </> : ''}
 

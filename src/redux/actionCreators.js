@@ -9,6 +9,9 @@ const testAccount = {
             actionColor: '#ffcc00',
         },
         disableGoBackButton: true,
+		profileNFT: {
+			src: 'https://gateway.pinata.cloud/ipfs/QmQLGRTdZzQyWFh7hHb8H9DrjPEhjpoc5k7uyx3MqChK8B/dragon-spheres%20%286%29.png'
+		},
         callbackURL: '',
         webookUrl: ''
     },
@@ -45,11 +48,23 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
     dispatch({type, payload});
 };
 
-export const fetchWallet = () => dispatch => {
+export const fetchWallet = walletPath => dispatch => {
 
-    const fetchWalletOk = payload => ({type: actionTypes.WALLET_OK, payload});
-    //const fetchWalletError = payload => ({type: actionTypes.WALLET_ERROR, payload});
+    let status = (testAccount.hasOwnProperty('name')) 
+        ? (testAccount.name === walletPath) 
+        ? 'ok' 
+        : 'error' 
+        : 'error';
 
-    dispatch(fetchWalletOk(testAccount));
+    if(status === 'ok')
+    {
+        dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
+    }
+    else{
+        dispatch({type: actionTypes.WALLET_ERROR, payload: {errMess: 'wallet not found'}});
+    }
 };
 
+export const updateNotification = payload => dispatch => {
+    dispatch({type: actionTypes.CONTROLLER_UPDATE_NOTIFICATION, payload});
+};

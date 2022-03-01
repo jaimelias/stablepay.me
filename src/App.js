@@ -35,7 +35,6 @@ export const App = () => {
 		<ThemeProvider theme={theme}>
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
-
 				<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 					<RenderMainComponent/>
 				</Box>

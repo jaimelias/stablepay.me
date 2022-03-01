@@ -6,6 +6,10 @@ export const Controllers = (state = {
     coin: '',
     coins: {},
     appScreen: 'app.payment.1',
+	notification: {
+		open: false,
+		message: ''
+	}
 }, action) => {
     switch (action.type)
     {
@@ -18,6 +22,8 @@ export const Controllers = (state = {
             return { ...state, coin: action.payload };
         case actionTypes.CONTROLLER_CHANGE_APP_SCREEN:
             return { ...state, appScreen: action.payload };
+        case actionTypes.CONTROLLER_UPDATE_NOTIFICATION:
+            return { ...state, notification: {...action.payload} };
         default: 
             return state;
     }

@@ -53,7 +53,7 @@ export default class PaymentConfirmationComponent extends Component {
 
     render()
     {
-        const {Wallet, Controllers, Config} = this.props;
+        const {Wallet, Controllers, Config, updateNotification} = this.props;
         const {amount, network, coin, coins} = Controllers;
         const {networks} = Config;
         const recipientWallet = (Wallet.status === 'ok') ? getRecipient({network, Wallet}) : {};
@@ -90,14 +90,17 @@ export default class PaymentConfirmationComponent extends Component {
                         <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={coins[coin].name} />
                     </ListItem>  
                     
-                    <Divider variant="inset" component="li" />
-
-                    <ListItem>
-                        <ListItemAvatar>
-                            <img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
-                        </ListItemAvatar>
-                        <ListItemText primary={networks[network].name} secondary={'Network'} />
-                    </ListItem>
+					
+					{coin !== network ? <>
+						<Divider variant="inset" component="li" />
+						
+						<ListItem>
+							<ListItemAvatar>
+								<img src={cryptoIcons[`${network}Icon`]} alt={network}  width="40" height="40" />
+							</ListItemAvatar>
+							<ListItemText primary={networks[network].name} secondary={'Network'} />
+						</ListItem>					
+					</> : ''}
 
                     <Divider variant="inset" component="li" />
 
@@ -107,6 +110,7 @@ export default class PaymentConfirmationComponent extends Component {
                         label={'Recipient Address'}
                         message={'Recipient address copied to clipboard!'}
                         image={contractIcon}
+						updateNotification={updateNotification}
                         />
 
                     {recipientWalletMemo ? <>
@@ -117,7 +121,8 @@ export default class PaymentConfirmationComponent extends Component {
                             label={'Memo'}
                             message={'Memo copied to clipboard!'}
                             image={contractIcon}
-                            />                        
+							updateNotification={updateNotification}
+                            />                      
                     </> : ''}
                    
                 </List>

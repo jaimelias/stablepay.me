@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  {fetchWallet, dispatchInputChanges} from '../redux/actionCreators';
+import  {fetchWallet, dispatchInputChanges, updateNotification} from '../redux/actionCreators';
+import NotFoundWallet from '../components/NotFoundComponent';
 import Payment from './PaymentComponent';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NotificationComponent} from '../components/appElements';
+import AvatarComponent from '../components/AvatarComponent';
+import Typography from '@mui/material/Typography';
 import * as Config from '../assets/config';
 
 const mapDispatchToProps = dispatch => (
 {
-	fetchWallet: () => dispatch(fetchWallet()),
-	dispatchInputChanges: ({type, payload}) => dispatch(dispatchInputChanges({type, payload}))
+	fetchWallet: walletPath => dispatch(fetchWallet(walletPath)),
+	dispatchInputChanges: ({type, payload}) => dispatch(dispatchInputChanges({type, payload})),
+	updateNotification: payload => dispatch(updateNotification(payload))
 });
 
 const mapStateToProps = state => ({
@@ -22,17 +26,30 @@ const mapStateToProps = state => ({
 class Main extends Component {
 
 	componentDidMount() {
-		setTimeout(() => this.props.fetchWallet(), 1000);
+		const {walletPath} = this.props;
+		setTimeout(() => this.props.fetchWallet(walletPath), 1000);
 	}
 	render() {
 
-		const {Controllers, Wallet, walletPath, networkPath, coinPath, amountPath, dispatchInputChanges} = this.props;
+		const {Controllers, Wallet, walletPath, networkPath, coinPath, amountPath, dispatchInputChanges, updateNotification} = this.props;
+		const {status} = Wallet;
+		const {notification} = Controllers;
+		let RenderComponent = '';
 
-		return (
+		const RenderWallet = () => (
 			<>
 				<Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
 
-					<Typography mb={3} variant="h5" component="h1" align="center">{walletPath}</Typography>
+					
+					
+					{Wallet.status === 'ok' ? <>
+						<AvatarComponent Wallet={Wallet} />
+					</> : ''}
+					
+					{Wallet.status !== 'ok' ? <>
+						<Typography variant="h5" component="h1" align="center">{walletPath}</Typography>
+					</> : ''}
+					
 					
 					{Wallet.status === 'ok' ?	
 						<>
@@ -42,7 +59,8 @@ class Main extends Component {
 								amountPath={amountPath} 
 								networkPath={networkPath} 
 								coinPath={coinPath} 
-								dispatchInputChanges={dispatchInputChanges} 
+								dispatchInputChanges={dispatchInputChanges}
+								updateNotification={updateNotification}
 								Config={Config}
 								/>
 						</>
@@ -57,8 +75,30 @@ class Main extends Component {
 
 
 				</Paper>
+				
+				<NotificationComponent 
+					updateNotification={updateNotification}
+					notification={notification}
+					/>
 			</>
 		);
+
+		switch(status)
+		{
+			case 'ok':
+				RenderComponent = () => <RenderWallet/>;
+				break;
+			case 'loading':
+				RenderComponent = () => <RenderWallet/>;
+				break;
+			case 'error':
+				RenderComponent = () => <NotFoundWallet/>;
+				break;
+			default:
+				RenderComponent = () => <NotFoundWallet/>;
+		}
+
+		return <RenderComponent/>;
 
 	};
 }
