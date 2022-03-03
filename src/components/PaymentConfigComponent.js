@@ -194,9 +194,10 @@ export default class PaymentConfigComponent extends Component {
                     sx={{mb: 3}} 
                     type="button" 
                     fullWidth
+                    size="small"
                     component={network && coin && !isInvalidAmount ? Link : 'button'}
                     to={network && coin && !isInvalidAmount ? `/${cofirmPath}` : ''}
-                    variant="contained">{'Next'}</Button>
+                    variant='contained'>{'Next'}</Button>
             </>
         )
     };

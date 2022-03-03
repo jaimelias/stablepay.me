@@ -125,7 +125,7 @@ export default class PaymentConfirmationComponent extends Component {
                     </> : ''}
                    
                 </List>
-                <Link to={`/${Wallet.data.name}`}><Typography variant="h5">&#8592;</Typography></Link>
+                <Button variant="outlined" size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
             </>
         );        
     }
