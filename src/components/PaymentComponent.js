@@ -12,7 +12,8 @@ export default class Payment extends Component {
 
     componentDidMount(){
 
-        const { dispatchInputChanges, Config, Wallet} = this.props;
+        const { dispatchInputChanges, Config, Wallet, Controllers} = this.props;
+        const {appScreen} = Controllers;
         const {networks, coins} = Config;
 		let {amountPath, networkPath, coinPath} = this.props;
         let network = '';
@@ -92,6 +93,31 @@ export default class Payment extends Component {
                     }                 
                 }
             }            
+        }
+        else{
+            //handles go back
+            if(appScreen === 'app.payment.2')
+            {
+                dispatchInputChanges({
+                    type: CONTROLLER_SELECT_NETWORK,
+                    payload: {network: '', coins: ''}
+                });
+
+                dispatchInputChanges({
+                    type: CONTROLLER_SELECT_COIN,
+                    payload: ''
+                });
+
+                dispatchInputChanges({
+                    type: CONTROLLER_CHANGE_AMOUNT,
+                    payload: ''
+                });	
+
+                dispatchInputChanges({
+                    type: CONTROLLER_CHANGE_APP_SCREEN,
+                    payload: 'app.payment.1'
+                });
+            }
         }
     }
 

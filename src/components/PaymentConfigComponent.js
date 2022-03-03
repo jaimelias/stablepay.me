@@ -13,6 +13,8 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import { cryptoIcons, appIcons } from '../assets/svgIcons';
+import { Link } from 'react-router-dom';
+
 
 const {dollarIcon} = appIcons;
 
@@ -116,11 +118,30 @@ export default class PaymentConfigComponent extends Component {
 
     render(){
 
-        const {Controllers, Config} = this.props;
+        const {Controllers, Config, Wallet} = this.props;
         const {networks} = Config;
         const {amount, network, coin, coins} = Controllers;
         const isInvalidAmount = (coin && network) ? isInvalidAmountString(amount) : true;
         let availableCoins = Object.keys(coins);
+
+        let cofirmArr = [Wallet.data.name];
+
+        if(network)
+        {
+            cofirmArr.push(network);
+
+            if(network !== coin)
+            {
+                cofirmArr.push(coin);
+            }
+
+            if(!isInvalidAmount)
+            {
+                cofirmArr.push(amount);
+            }
+        }
+
+        const cofirmPath = cofirmArr.join('/');
 
         return (
             <>
@@ -173,7 +194,8 @@ export default class PaymentConfigComponent extends Component {
                     sx={{mb: 3}} 
                     type="button" 
                     fullWidth
-                    onClick={() => this.handleOpenWalletConfirm()}
+                    component={network && coin && !isInvalidAmount ? Link : 'button'}
+                    to={network && coin && !isInvalidAmount ? `/${cofirmPath}` : ''}
                     variant="contained">{'Next'}</Button>
             </>
         )

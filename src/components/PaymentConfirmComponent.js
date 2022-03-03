@@ -10,12 +10,12 @@ import  {abbreviateAddress, getRecipient} from '../utilities/utilities';
 import {CopyListItem} from './appElements';
 import { cryptoIcons, appIcons } from '../assets/svgIcons';
 import * as actionTypes from '../redux/actionTypes';
+import { Link } from 'react-router-dom';
 
 
 const {contractIcon} = appIcons;
 
 const {CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
-
 
 export default class PaymentConfirmationComponent extends Component {
 
@@ -42,13 +42,12 @@ export default class PaymentConfirmationComponent extends Component {
     }
 
     handleGoBack(){
-
         const {dispatchInputChanges} = this.props;
 
         dispatchInputChanges({
             type: CONTROLLER_CHANGE_APP_SCREEN,
             payload: 'app.payment.1'
-        });            
+        });
     }
 
     render()
@@ -126,7 +125,7 @@ export default class PaymentConfirmationComponent extends Component {
                     </> : ''}
                    
                 </List>
-                <Button onClick={() => this.handleGoBack()}><Typography variant="h5">&#8592;</Typography></Button>
+                <Link to={`/${Wallet.data.name}`}><Typography variant="h5">&#8592;</Typography></Link>
             </>
         );        
     }
