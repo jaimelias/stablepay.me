@@ -51,9 +51,6 @@ export default class Payment extends Component {
                 {
                     if(coins.hasOwnProperty(networkPath))
                     {
-						
-						console.log({networkPath, coinPath, amountPath});
-						
                         coin = networkPath;
                     }
                 }
@@ -63,12 +60,9 @@ export default class Payment extends Component {
 					amount = amountPath;
 				}
 				
-				
 
                 if(network && coin)
-                {
-					console.log({network, coin, amount});
-					
+                {					
                     if(coins.hasOwnProperty(coin))
                     {
                         if(coins[coin].addresses.hasOwnProperty(network))
@@ -107,7 +101,7 @@ export default class Payment extends Component {
         const {appScreen} = Controllers;
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
-        
+
         return (
             <>
 
@@ -115,27 +109,38 @@ export default class Payment extends Component {
                   <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
                 </Box>                
 
-                {appScreen === 'app.payment.1' ? <>
-                    <PaymentConfigComponent
-                        dispatchInputChanges={dispatchInputChanges}
-                        Controllers={Controllers}
-                        Wallet={Wallet}
-                        Config={Config}
-                    />
-                </> : ''}
-
-                {appScreen === 'app.payment.2' ?  <>
-                  <PaymentConfirmationComponent
+                <RenderAppScreen
+                    appScreen={appScreen}
                     dispatchInputChanges={dispatchInputChanges}
                     Controllers={Controllers}
                     Wallet={Wallet}
                     Config={Config}
-					updateNotification={updateNotification}
-                  />
-                </> : ''}
+                    updateNotification={updateNotification}                
+                />
 
             </>
         );
 
     };
-}
+};
+
+const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, Config, updateNotification}) => (<>
+    {appScreen === 'app.payment.1' ? <>
+        <PaymentConfigComponent
+            dispatchInputChanges={dispatchInputChanges}
+            Controllers={Controllers}
+            Wallet={Wallet}
+            Config={Config}
+        />
+    </> : ''}
+
+    {appScreen === 'app.payment.2' ?  <>
+      <PaymentConfirmationComponent
+        dispatchInputChanges={dispatchInputChanges}
+        Controllers={Controllers}
+        Wallet={Wallet}
+        Config={Config}
+        updateNotification={updateNotification}
+      />
+    </> : ''}          
+</>);

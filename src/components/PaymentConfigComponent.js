@@ -119,7 +119,6 @@ export default class PaymentConfigComponent extends Component {
         const {Controllers, Config} = this.props;
         const {networks} = Config;
         const {amount, network, coin, coins} = Controllers;
-
         const isInvalidAmount = (coin && network) ? isInvalidAmountString(amount) : true;
         let availableCoins = Object.keys(coins);
 
@@ -162,22 +161,11 @@ export default class PaymentConfigComponent extends Component {
                 </> : ''}
         
         
-                <TextField
-                    disabled={!coin || !network}
-                    sx={{mb: 3}}
-                    fullWidth
-                    id="amount"
-                    label={'Amount'}
-                    onChange={event => this.handleAmountChange(event.target.value)}
-                    value={amount || ''}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <img alt="paymentIcon" src={(!coin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
-                            </InputAdornment>
-                        )
-                    }}
-                    variant="filled"
+                <AmountField 
+                    network={network}
+                    coin={coin}
+                    amount={amount}
+                    handleAmountChange={this.handleAmountChange}
                 />
                 
                 <Button
@@ -191,3 +179,23 @@ export default class PaymentConfigComponent extends Component {
         )
     };
 };
+
+const AmountField = ({network, coin, amount, handleAmountChange}) => (                
+    <TextField
+        disabled={!coin || !network}
+        sx={{mb: 3}}
+        fullWidth
+        id="amount"
+        label={'Amount'}
+        onChange={event => handleAmountChange(event.target.value)}
+        value={amount || ''}
+        InputProps={{
+            startAdornment: (
+                <InputAdornment position="start">
+                    <img alt="paymentIcon" src={(!coin) ? dollarIcon : cryptoIcons[`${coin}Icon`]} width="20" height="20" />
+                </InputAdornment>
+            )
+        }}
+        variant="filled"
+    />
+);

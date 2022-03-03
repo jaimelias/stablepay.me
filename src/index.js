@@ -5,7 +5,6 @@ import {App} from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 
-
 const HomePage = () => (<h1>HomePage</h1>);
 
 ReactDOM.render(

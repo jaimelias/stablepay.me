@@ -3,7 +3,7 @@ export const themeConfig = {
         fontFamily: 'Raleway, Arial',
     },
     palette: {
-		mode: 'dark',
+		mode: 'light',
         primary: {
             main: '#ffcc00'
         }

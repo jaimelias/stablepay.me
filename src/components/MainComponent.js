@@ -8,7 +8,6 @@ import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NotificationComponent} from '../components/appElements';
 import AvatarComponent from '../components/AvatarComponent';
-import Typography from '@mui/material/Typography';
 import * as Config from '../assets/config';
 
 const mapDispatchToProps = dispatch => (
@@ -32,27 +31,22 @@ class Main extends Component {
 	render() {
 
 		const {Controllers, Wallet, walletPath, networkPath, coinPath, amountPath, dispatchInputChanges, updateNotification} = this.props;
-		const {status} = Wallet;
 		const {notification} = Controllers;
-		let RenderComponent = '';
+		const {status} = Wallet;
 
-		const RenderWallet = () => (
-			<>
-				<Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+		return (
 
-					
-					
-					{Wallet.status === 'ok' ? <>
-						<AvatarComponent Wallet={Wallet} />
-					</> : ''}
-					
-					{Wallet.status !== 'ok' ? <>
-						<Typography variant="h5" component="h1" align="center">{walletPath}</Typography>
-					</> : ''}
-					
-					
-					{Wallet.status === 'ok' ?	
-						<>
+			<Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+				{status === 'loading' ? <>
+					<Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+						<CircularProgress />
+					</Box>
+				</> : '' }
+			
+				{status === 'ok' ? <>
+
+							<AvatarComponent Wallet={Wallet} />
+		
 							<Payment 
 								Controllers={Controllers} 
 								Wallet={Wallet}
@@ -63,42 +57,20 @@ class Main extends Component {
 								updateNotification={updateNotification}
 								Config={Config}
 								/>
-						</>
-					: ''}
+			
+							
+				</> : ''}
+
+				{status === 'error' ? <><NotFoundWallet walletPath={walletPath} /></> : ''}
 
 
-					{Wallet.status === 'loading' ?	
-						<Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-							<CircularProgress />
-						</Box>
-					: ''}					
-
-
-				</Paper>
-				
 				<NotificationComponent 
-					updateNotification={updateNotification}
-					notification={notification}
-					/>
-			</>
+							updateNotification={updateNotification}
+							notification={notification}
+							/>
+			</Paper>
+
 		);
-
-		switch(status)
-		{
-			case 'ok':
-				RenderComponent = () => <RenderWallet/>;
-				break;
-			case 'loading':
-				RenderComponent = () => <RenderWallet/>;
-				break;
-			case 'error':
-				RenderComponent = () => <NotFoundWallet/>;
-				break;
-			default:
-				RenderComponent = () => <NotFoundWallet/>;
-		}
-
-		return <RenderComponent/>;
 
 	};
 }

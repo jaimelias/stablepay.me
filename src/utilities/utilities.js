@@ -72,3 +72,9 @@ export const filterCoinsByWallet = ({Wallet, coins, network}) => {
 
     return output;
 };
+
+export const isUrl = str => {
+	const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/igm;
+
+	return (str) ? regex.test(str) : false;
+}
