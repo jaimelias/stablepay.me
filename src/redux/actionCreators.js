@@ -1,4 +1,11 @@
 import  * as actionTypes from './actionTypes';
+import Moralis from 'moralis';
+
+Moralis.start({
+    serverUrl: 'https://hepiqowzi15v.usemoralis.com:2053/server', 
+    appId: 'wdxGqDslKg2m84Q9OY3dzLIxGAb5a4lzEtXM7kMs'
+});
+
 
 const testAccount = {
     network: 'eth',
@@ -11,7 +18,7 @@ const testAccount = {
         },
         disableGoBackButton: true,
 		profileNFT: {
-			src: 'https://gateway.pinata.cloud/ipfs/QmQLGRTdZzQyWFh7hHb8H9DrjPEhjpoc5k7uyx3MqChK8B/dragon-spheres%20%286%29.png'
+			src: ''
 		},
         callbackURL: '',
         webookUrl: ''
@@ -51,20 +58,34 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
 
 export const fetchWallet = walletPath => dispatch => {
 
-    let status = (testAccount.hasOwnProperty('name')) 
-        ? (testAccount.name === walletPath) 
-        ? 'ok' 
-        : 'error' 
-        : 'error';
+    let user = Moralis.User.current();
 
-    if(status === 'ok')
-    {
-        dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
-    }
-    else{
-        dispatch({type: actionTypes.WALLET_ERROR, payload: {errMess: 'wallet not found'}});
-    }
+    if (!user) {
+        user = Moralis.authenticate({ signingMessage: "Log in using Moralis" })
+          .then(user => {
+
+            const userAddress = user.get('ethAddress');
+            const payload = {...testAccount, ...user, userAddress};
+
+            dispatch({type: actionTypes.WALLET_OK, payload});
+          })
+          .catch(error => {
+            dispatch({type: actionTypes.WALLET_ERROR, payload: {errMess: error.message}});
+          });
+      }
+      else{
+        const userAddress = user.get('ethAddress');
+        const payload = {...testAccount, ...user, userAddress};
+
+        dispatch({type: actionTypes.WALLET_OK, payload});
+      }
 };
+
+
+async function logOut() {
+    await Moralis.User.logOut();
+    console.log("logged out");
+  }
 
 export const updateNotification = payload => dispatch => {
     dispatch({type: actionTypes.CONTROLLER_UPDATE_NOTIFICATION, payload});

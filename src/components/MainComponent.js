@@ -10,6 +10,7 @@ import {NotificationComponent} from '../components/appElements';
 import AvatarComponent from '../components/AvatarComponent';
 import * as Config from '../assets/config';
 
+
 const mapDispatchToProps = dispatch => (
 {
 	fetchWallet: walletPath => dispatch(fetchWallet(walletPath)),
@@ -25,6 +26,7 @@ const mapStateToProps = state => ({
 class Main extends Component {
 
 	componentDidMount() {
+
 		const {walletPath} = this.props;
 		setTimeout(() => this.props.fetchWallet(walletPath), 1000);
 	}

@@ -13,7 +13,7 @@ import * as actionTypes from '../redux/actionTypes';
 import { Link } from 'react-router-dom';
 
 
-const {contractIcon} = appIcons;
+const {copyIcon} = appIcons;
 
 const {CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
@@ -108,7 +108,7 @@ export default class PaymentConfirmationComponent extends Component {
                         labelSanitizer={abbreviateAddress}
                         label={'Recipient Address'}
                         message={'Recipient address copied to clipboard!'}
-                        image={contractIcon}
+                        image={copyIcon}
 						updateNotification={updateNotification}
                         />
 
@@ -119,13 +119,13 @@ export default class PaymentConfirmationComponent extends Component {
                             copyThis={recipientWalletMemo}
                             label={'Memo'}
                             message={'Memo copied to clipboard!'}
-                            image={contractIcon}
+                            image={copyIcon}
 							updateNotification={updateNotification}
                             />                      
                     </> : ''}
                    
                 </List>
-                <Button variant="outlined" size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
+                <Button size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
             </>
         );        
     }

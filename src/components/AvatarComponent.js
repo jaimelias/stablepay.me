@@ -16,7 +16,7 @@ export default class AvatarComponent extends Component {
 				<>
 					<Typography variant="h5" component="h1" align={!profileNFT ? 'center' : 'left'} >{name}</Typography>
 					{description ? <>
-						<Typography variant="body2" align={!profileNFT ? 'center' : 'left'}>{description}</Typography>
+						<Typography variant="body2" sx={{ fontWeight: 'medium' }} align={!profileNFT ? 'center' : 'left'}>{description}</Typography>
 					</> : ''}
 				</>
 			);

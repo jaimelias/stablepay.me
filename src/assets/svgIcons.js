@@ -1,17 +1,17 @@
-import usdtIcon from '../assets/svg/crypto/usdt.svg';
-import usdcIcon from '../assets/svg/crypto/usdc.svg';
-import busdIcon from '../assets/svg/crypto/busd.svg';
-import btcIcon from '../assets/svg/crypto/btc.svg';
-import ethIcon from '../assets/svg/crypto/eth.svg';
-import bnbIcon from '../assets/svg/crypto/bnb.svg';
-import maticIcon from '../assets/svg/crypto/matic.svg';
-import adaIcon from '../assets/svg/crypto/ada.svg';
-import solIcon from '../assets/svg/crypto/sol.svg';
-import contractIcon from '../assets/svg/icons/contract.svg';
-import dollarIcon from '../assets/svg/icons/dollar.svg';
-import metamaskIcon from '../assets/svg/icons/metamask.svg';
+const usdtIcon = '/svg/crypto/usdt.svg';
+const usdcIcon = '/svg/crypto/usdc.svg';
+const busdIcon = '/svg/crypto/busd.svg';
+const btcIcon = '/svg/crypto/btc.svg';
+const ethIcon = '/svg/crypto/eth.svg';
+const bnbIcon = '/svg/crypto/bnb.svg';
+const maticIcon = '/svg/crypto/matic.svg';
+const adaIcon = '/svg/crypto/ada.svg';
+const solIcon = '/svg/crypto/sol.svg';
+const copyIcon = '/svg/icons/copy.svg';
+const dollarIcon = '/svg/icons/dollar.svg';
+const metamaskIcon = '/svg/icons/metamask.svg';
 
 
 export const cryptoIcons = {usdtIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, maticIcon, adaIcon, solIcon};
-export const appIcons = {contractIcon, dollarIcon};
+export const appIcons = {copyIcon, dollarIcon};
 export const walletIcons = {metamaskIcon};
