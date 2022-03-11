@@ -10,7 +10,6 @@ Moralis.start({
 const testAccount = {
     network: 'eth',
     name: 'jaimelias',
-    description: 'hola, este es el wallet de Jaime Castillo fundador de Aero Albrook y Panama Jet Hub en Panamá es el wallet de Jaime es el wallet de Jaime es el wallet',
     settings: {
         theme: {
             backgroundColor: 'dark',

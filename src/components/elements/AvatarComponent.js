@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {isUrl} from '../utilities/utilities';
+import {isUrl} from '../../utilities/utilities';
 
 export default class AvatarComponent extends Component {
 
@@ -14,7 +14,7 @@ export default class AvatarComponent extends Component {
 
 			const metaData = (
 				<>
-					<Typography variant="h5" component="h1" align={!profileNFT ? 'center' : 'left'} >{name}</Typography>
+					<Typography variant="h5" component="h1" align={!profileNFT ? 'center' : 'left'} >{'@'}{name}</Typography>
 				</>
 			);
 
