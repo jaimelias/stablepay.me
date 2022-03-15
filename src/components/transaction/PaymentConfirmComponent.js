@@ -27,12 +27,12 @@ export default class PaymentConfirmationComponent extends Component {
 
     handleOpenExplorer({asset, network}){
         const {Config, Controllers} = this.props;
-        const {coins} = Controllers
+        const {assets} = Controllers
         const {networks} = Config;
 
-        if(coins[asset] && networks[network].explorer)
+        if(assets[asset] && networks[network].explorer)
         {
-            const explorerUrl = networks[network].explorer + coins[asset].addresses[network];
+            const explorerUrl = networks[network].explorer + assets[asset].addresses[network];
 
             window.open(explorerUrl, "_blank")
         }
@@ -50,7 +50,7 @@ export default class PaymentConfirmationComponent extends Component {
     render()
     {
         const {Wallet, Controllers, Config, updateNotification} = this.props;
-        const {amount, network, asset, coins} = Controllers;
+        const {amount, network, asset, assets} = Controllers;
         const {networks} = Config;
         const recipientWallet = (Wallet.status === 'ok') ? getRecipient({network, Wallet}) : {};
         const {address: recipientWalletAddress, memo: recipientWalletMemo} = recipientWallet || '';
@@ -60,7 +60,7 @@ export default class PaymentConfirmationComponent extends Component {
 
         if(asset && network)
         {
-            if(coins[asset].addresses[network] !== true)
+            if(assets[asset].addresses[network] !== true)
             {
                 explorerBtnAttr = true;
                 explorerOnClick = () => this.handleOpenExplorer({asset, network});
@@ -83,7 +83,7 @@ export default class PaymentConfirmationComponent extends Component {
                         <ListItemAvatar>
                             <img src={cryptoIcons[`${asset}Icon`]} alt={asset}  width="40" height="40"/>
                         </ListItemAvatar>
-                        <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={coins[asset].name} />
+                        <ListItemText primary={<Typography variant="h5">{amount}</Typography>} secondary={assets[asset].name} />
                     </ListItem>  
                     
 					

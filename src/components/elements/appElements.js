@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import MuiAlert from '@mui/material/Alert';
 
-import { coins } from '../../assets/config';
+import { assets } from '../../assets/config';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,7 +20,7 @@ export const DisplayStableLogos = () => {
     return (
         <Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             {
-                Object.keys(coins)
+                Object.keys(assets)
                     .map((v, i) => <img key={i} alt={v} style={{margin: '2px'}} src={`/assets/crypto/${v}.svg`} width="40" height="40" />)
             }
         </Box>

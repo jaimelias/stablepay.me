@@ -28,6 +28,8 @@ class WalletComponent extends Component {
 
 	componentDidMount() {
 
+		console.log(this.props);
+
 		const {walletPath} = this.props;
 		setTimeout(() => this.props.fetchWallet(walletPath), 1000);
 	}

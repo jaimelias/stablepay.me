@@ -18,7 +18,7 @@ import { cryptoIcons, appIcons } from '../../assets/svgIcons';
 
 const {dollarIcon} = appIcons;
 
-const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
+const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 
 export default class PaymentConfigComponent extends Component {
@@ -48,24 +48,24 @@ export default class PaymentConfigComponent extends Component {
     handleNetworkSelect(network){
         const {dispatchInputChanges, Config, Controllers, Wallet} = this.props;
         let {asset} = Controllers;
-        const {networks, coins} = Config;
+        const {networks, assets} = Config;
 
         if(networks.hasOwnProperty(network))
         {
 
-            let availableCoins = filterCoins({Wallet, coins, network});
+            let availableCoins = filterCoins({Wallet, assets, network});
 
-            //sets the network and coins
+            //sets the network and assets
             dispatchInputChanges({
                 type: CONTROLLER_SELECT_NETWORK,
-                payload: {network, coins: availableCoins}
+                payload: {network, assets: availableCoins}
             });
 
              // unsets asset if not available in network
             if(!availableCoins.hasOwnProperty(asset))
             {
                 dispatchInputChanges({
-                    type: CONTROLLER_SELECT_COIN,
+                    type: CONTROLLER_SELECT_ASSET,
                     payload: ''
                 });
 
@@ -74,7 +74,7 @@ export default class PaymentConfigComponent extends Component {
                 if(availableCoins.hasOwnProperty(network))
                 {
                     dispatchInputChanges({
-                        type: CONTROLLER_SELECT_COIN,
+                        type: CONTROLLER_SELECT_ASSET,
                         payload: network || ''
                     }); 
                 }                
@@ -84,11 +84,11 @@ export default class PaymentConfigComponent extends Component {
 
     handleCoinSelect(asset){
         const {dispatchInputChanges, Controllers} = this.props;
-        const {coins} = Controllers;
-        if(coins.hasOwnProperty(asset) || asset === '')
+        const {assets} = Controllers;
+        if(assets.hasOwnProperty(asset) || asset === '')
         {
             dispatchInputChanges({
-                type: CONTROLLER_SELECT_COIN,
+                type: CONTROLLER_SELECT_ASSET,
                 payload: asset || ''
             });   
         }
@@ -97,8 +97,8 @@ export default class PaymentConfigComponent extends Component {
     handleOpenWalletConfirm()
     {
         const {Controllers, dispatchInputChanges} = this.props;
-        let {amount, coins, asset} = Controllers;
-        const decimals = coins[asset].decimals;
+        let {amount, assets, asset} = Controllers;
+        const decimals = assets[asset].decimals;
 
         if(isValidAmountTyping(amount))
         {
@@ -120,9 +120,9 @@ export default class PaymentConfigComponent extends Component {
 
         const {Controllers, Config, Wallet} = this.props;
         const {networks} = Config;
-        const {amount, network, asset, coins} = Controllers;
+        const {amount, network, asset, assets} = Controllers;
         const isInvalidAmount = (asset && network) ? isInvalidAmountString(amount) : true;
-        let availableCoins = Object.keys(coins);
+        let availableCoins = Object.keys(assets);
 
         let cofirmArr = [Wallet.data.name];
 
@@ -162,7 +162,7 @@ export default class PaymentConfigComponent extends Component {
                 </FormControl>
         
         
-                {(Object.keys(coins).length > 1) ? <>
+                {(Object.keys(assets).length > 1) ? <>
                     <FormControl component="fieldset" fullWidth sx={{mb: 3}}>
                         <FormLabel component="legend">{'Coins'}</FormLabel>
                         <RadioGroup
@@ -175,7 +175,7 @@ export default class PaymentConfigComponent extends Component {
                             {
                             
                             availableCoins
-                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={coins[v].name} />)
+                                .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={assets[v].name} />)
                             }
                         </RadioGroup>
                     </FormControl>                

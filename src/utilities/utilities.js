@@ -30,24 +30,24 @@ export const getRecipient = ({network, Wallet}) => {
     return recipient;
 };
 
-export const filterCoins = ({Wallet, coins, network}) => filterCoinsByWallet({Wallet, coins: filterCoinsByNetwork({coins, network}), network});
+export const filterCoins = ({Wallet, assets, network}) => filterCoinsByWallet({Wallet, assets: filterCoinsByNetwork({assets, network}), network});
 
 
-export const filterCoinsByNetwork = ({coins, network}) => {
+export const filterCoinsByNetwork = ({assets, network}) => {
     let output = {}
 
-    for(let c in coins)
+    for(let c in assets)
     {
-        if(coins[c].addresses[network])
+        if(assets[c].addresses[network])
         {
-            output[c] = coins[c];
+            output[c] = assets[c];
         }
     }
 
     return output;
 };
 
-export const filterCoinsByWallet = ({Wallet, coins, network}) => {
+export const filterCoinsByWallet = ({Wallet, assets, network}) => {
     const {data} = Wallet;
     let output = {};
 
@@ -57,13 +57,13 @@ export const filterCoinsByWallet = ({Wallet, coins, network}) => {
 
         if(typeof walletData === 'object')
         {
-            for(let c in coins)
+            for(let c in assets)
             {
                 if(walletData[network])
                 {
-                    if(walletData[network].coins.includes(c))
+                    if(walletData[network].assets.includes(c))
                     {
-                        output[c] = coins[c];
+                        output[c] = assets[c];
                     }
                 }
             }            

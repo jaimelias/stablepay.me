@@ -34,7 +34,7 @@ export const networks = {
 	}
 };
 
-export const coins = {
+export const assets = {
 	ada: {
 			name: 'Cardano (ADA)',
 			decimals: 18,

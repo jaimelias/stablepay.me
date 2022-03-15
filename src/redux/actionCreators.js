@@ -1,10 +1,4 @@
 import  * as actionTypes from './actionTypes';
-import Moralis from 'moralis';
-
-Moralis.start({
-    serverUrl: 'https://hepiqowzi15v.usemoralis.com:2053/server', 
-    appId: 'wdxGqDslKg2m84Q9OY3dzLIxGAb5a4lzEtXM7kMs'
-});
 
 
 const testAccount = {
@@ -25,28 +19,28 @@ const testAccount = {
     data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            coins: ['usdt', 'usdc', 'eth']
+            assets: ['usdt', 'usdc', 'eth']
         },
         bnb: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            coins: ['usdt', 'usdc', 'bnb']
+            assets: ['usdt', 'usdc', 'bnb']
         },
         matic: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            coins: ['usdt', 'usdc', 'matic']
+            assets: ['usdt', 'usdc', 'matic']
         },
         btc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            coins: ['btc'],
+            assets: ['btc'],
             memo: 'XYZ'
         },
         sol: {
             address: '5mC53LninALGCPBcxb3Uikzq2KvsJ5S37zw4Kib64xYb',
-            coins: ['usdt', 'usdc', 'sol']
+            assets: ['usdt', 'usdc', 'sol']
         },
         ada: {
             address: 'addr_test1qz027j4ygr4uva5sfjmjn45twql3uqdm77fyqkgs9kktygv3hec9806pfc8kendffflwytnqz9h3x0pcka5q5k44z00shk3dff',
-            coins: ['ada']
+            assets: ['ada']
         }
     }
 };
@@ -57,34 +51,8 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
 
 export const fetchWallet = walletPath => dispatch => {
 
-    let user = Moralis.User.current();
-
-    if (!user) {
-        user = Moralis.authenticate({ signingMessage: "Log in using Moralis" })
-          .then(user => {
-
-            const userAddress = user.get('ethAddress');
-            const payload = {...testAccount, ...user, userAddress};
-
-            dispatch({type: actionTypes.WALLET_OK, payload});
-          })
-          .catch(error => {
-            dispatch({type: actionTypes.WALLET_ERROR, payload: {errMess: error.message}});
-          });
-      }
-      else{
-        const userAddress = user.get('ethAddress');
-        const payload = {...testAccount, ...user, userAddress};
-
-        dispatch({type: actionTypes.WALLET_OK, payload});
-      }
+      dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
 };
-
-
-async function logOut() {
-    await Moralis.User.logOut();
-    console.log("logged out");
-  }
 
 export const updateNotification = payload => dispatch => {
     dispatch({type: actionTypes.CONTROLLER_UPDATE_NOTIFICATION, payload});

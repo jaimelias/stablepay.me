@@ -7,7 +7,7 @@ import * as actionTypes from '../../redux/actionTypes';
 import {StepsComponent} from '../elements/appElements';
 
 
-const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_COIN, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
+const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 export default class Payment extends Component {
 
@@ -15,14 +15,11 @@ export default class Payment extends Component {
 
         const { dispatchInputChanges, Config, Wallet, Controllers} = this.props;
         const {appScreen} = Controllers;
-        const {networks, coins} = Config;
+        const {networks, assets} = Config;
 		let {amountPath, networkPath, assetPath} = this.props;
         let network = '';
         let asset = '';
-        let amount = '';		
-		amountPath = (amountPath) ? amountPath : '';
-		networkPath = (networkPath) ? networkPath : '';
-		assetPath = (assetPath) ? assetPath : '';
+        let amount = '';
 
         if(networkPath)
         {
@@ -36,21 +33,21 @@ export default class Payment extends Component {
 
             if(network)
             {
-                let availableCoins = filterCoins({Wallet, network, coins});
+                let availableCoins = filterCoins({Wallet, network, assets});
 
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_NETWORK,
-                    payload: {network, coins: availableCoins}
+                    payload: {network, assets: availableCoins}
                 });
 
-                if(coins.hasOwnProperty(assetPath))
+                if(assets.hasOwnProperty(assetPath))
                 {
                     asset = assetPath;
                 }
 				
                if(!assetPath)
                 {
-                    if(coins.hasOwnProperty(networkPath))
+                    if(assets.hasOwnProperty(networkPath))
                     {
                         asset = networkPath;
                     }
@@ -64,16 +61,16 @@ export default class Payment extends Component {
 
                 if(network && asset)
                 {					
-                    if(coins.hasOwnProperty(asset))
+                    if(assets.hasOwnProperty(asset))
                     {
-                        if(coins[asset].addresses.hasOwnProperty(network))
+                        if(assets[asset].addresses.hasOwnProperty(network))
                         {
-                            const decimals = coins[asset].decimals;
+                            const decimals = assets[asset].decimals;
                             amount = round({val: amount, precision: decimals});
 
                             
                             dispatchInputChanges({
-                                type: CONTROLLER_SELECT_COIN,
+                                type: CONTROLLER_SELECT_ASSET,
                                 payload: asset || ''
                             });
                             
@@ -100,11 +97,11 @@ export default class Payment extends Component {
             {
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_NETWORK,
-                    payload: {network: '', coins: ''}
+                    payload: {network: '', assets: ''}
                 });
 
                 dispatchInputChanges({
-                    type: CONTROLLER_SELECT_COIN,
+                    type: CONTROLLER_SELECT_ASSET,
                     payload: ''
                 });
 
