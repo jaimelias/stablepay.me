@@ -11,7 +11,6 @@ import AvatarComponent from './elements/AvatarComponent';
 import * as Config from '../assets/config';
 
 
-
 const mapDispatchToProps = dispatch => (
 {
 	fetchWallet: walletPath => dispatch(fetchWallet(walletPath)),
@@ -24,15 +23,15 @@ const mapStateToProps = state => ({
 	Controllers: state.Controllers
 });
 
+
+
 class WalletComponent extends Component {
 
 	componentDidMount() {
-
-		console.log(this.props);
-
 		const {walletPath} = this.props;
 		setTimeout(() => this.props.fetchWallet(walletPath), 1000);
 	}
+
 	render() {
 
 		const {Controllers, Wallet, walletPath, networkPath, assetPath, amountPath, dispatchInputChanges, updateNotification} = this.props;

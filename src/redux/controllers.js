@@ -9,13 +9,7 @@ export const Controllers = (state = {
 	notification: {
 		open: false,
 		message: ''
-	},
-    paths: {
-        walletPath: '', 
-        networkPath: '', 
-        assetPath: '', 
-        amountPath: ''
-    }
+	}
 }, action) => {
 
     const {payload} = action;
@@ -33,8 +27,6 @@ export const Controllers = (state = {
             return { ...state, appScreen: payload };
         case actionTypes.CONTROLLER_UPDATE_NOTIFICATION:
             return { ...state, notification: {...payload} };
-        case actionTypes.CONTROLLER_UPDATE_PATHS:
-            return { ...state, paths: {...payload} };
         default: 
             return state;
     }

@@ -21,7 +21,7 @@ export default class PaymentConfirmationComponent extends Component {
         super(props);
 
         this.handleOpenExplorer = this.handleOpenExplorer.bind(this);
-        this.handleGoBack = this.handleGoBack.bind(this);
+        this.handleGoConfigComponent = this.handleGoConfigComponent.bind(this);
     }
 
 
@@ -38,7 +38,7 @@ export default class PaymentConfirmationComponent extends Component {
         }
     }
 
-    handleGoBack(){
+    handleGoConfigComponent(){
         const {dispatchInputChanges} = this.props;
 
         dispatchInputChanges({
@@ -122,7 +122,7 @@ export default class PaymentConfirmationComponent extends Component {
                     </> : ''}
                    
                 </List>
-                <Button size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
+                <Button onClick={() => this.handleGoConfigComponent()} size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
             </>
         );        
     }

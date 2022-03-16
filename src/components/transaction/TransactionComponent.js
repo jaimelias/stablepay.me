@@ -6,7 +6,6 @@ import  {filterCoins, isInvalidAmountString, round} from '../../utilities/utilit
 import * as actionTypes from '../../redux/actionTypes';
 import {StepsComponent} from '../elements/appElements';
 
-
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 export default class Payment extends Component {
@@ -165,5 +164,5 @@ const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, 
         Config={Config}
         updateNotification={updateNotification}
       />
-    </> : ''}          
+    </> : ''}
 </>);

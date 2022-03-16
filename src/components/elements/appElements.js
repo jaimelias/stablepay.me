@@ -8,7 +8,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import MuiAlert from '@mui/material/Alert';
-
 import { assets } from '../../assets/config';
 
 const Alert = React.forwardRef(function Alert(props, ref) {

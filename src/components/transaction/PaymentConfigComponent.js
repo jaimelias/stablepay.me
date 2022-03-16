@@ -27,7 +27,7 @@ export default class PaymentConfigComponent extends Component {
         this.handleAmountChange = this.handleAmountChange.bind(this);
         this.handleNetworkSelect = this.handleNetworkSelect.bind(this);
         this.handleCoinSelect = this.handleCoinSelect.bind(this);
-        this.handleOpenWalletConfirm = this.handleOpenWalletConfirm.bind(this);
+        this.handleGoConfirmComponent = this.handleGoConfirmComponent.bind(this);
     }
 
     handleAmountChange(amount){
@@ -94,7 +94,7 @@ export default class PaymentConfigComponent extends Component {
         }
     };    
 
-    handleOpenWalletConfirm()
+    handleGoConfirmComponent()
     {
         const {Controllers, dispatchInputChanges} = this.props;
         let {amount, assets, asset} = Controllers;
@@ -197,6 +197,7 @@ export default class PaymentConfigComponent extends Component {
                     size="small"
                     component={network && asset && !isInvalidAmount ? Link : 'button'}
                     to={network && asset && !isInvalidAmount ? `/${cofirmPath}` : ''}
+                    onClick={() => this.handleGoConfirmComponent()}
                     variant='contained'>{'Next'}</Button>
             </>
         )
