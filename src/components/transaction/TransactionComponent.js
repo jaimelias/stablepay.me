@@ -22,71 +22,46 @@ export default class Payment extends Component {
 
         if(networkPath)
         {
-            for(let n in networks)
-            {
-                if(n === networkPath)
-                {
-                    network = n;
-                }
-            }
+            network = networkPath;
 
             if(network)
             {
                 let availableCoins = filterCoins({Wallet, network, assets});
+                const {mainCoin} = networks[network];
 
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_NETWORK,
                     payload: {network, assets: availableCoins}
                 });
 
-                if(assets.hasOwnProperty(assetPath))
-                {
-                    asset = assetPath;
-                }
-				
-               if(!assetPath)
-                {
-                    if(assets.hasOwnProperty(networkPath))
-                    {
-                        asset = networkPath;
-                    }
-                }
-				
-				if(!isInvalidAmountString(amountPath))
-				{
-					amount = amountPath;
-				}
-				
+                asset = assetPath;
 
                 if(network && asset)
                 {					
-                    if(assets.hasOwnProperty(asset))
+                    if(assets[asset].addresses.hasOwnProperty(network))
                     {
-                        if(assets[asset].addresses.hasOwnProperty(network))
+                        const decimals = assets[asset].decimals;
+                        amount = round({val: amount, precision: decimals});
+
+                        
+                        dispatchInputChanges({
+                            type: CONTROLLER_SELECT_ASSET,
+                            payload: asset || ''
+                        });
+                        
+                        if(amount)
                         {
-                            const decimals = assets[asset].decimals;
-                            amount = round({val: amount, precision: decimals});
-
-                            
                             dispatchInputChanges({
-                                type: CONTROLLER_SELECT_ASSET,
-                                payload: asset || ''
-                            });
-                            
-							if(amount)
-							{
-								dispatchInputChanges({
-									type: CONTROLLER_CHANGE_AMOUNT,
-									payload: amount.toString() || ''
-								});	
+                                type: CONTROLLER_CHANGE_AMOUNT,
+                                payload: amount.toString() || ''
+                            });	
 
-								dispatchInputChanges({
-									type: CONTROLLER_CHANGE_APP_SCREEN,
-									payload: 'app.payment.2'
-								});						
-							}
+                            dispatchInputChanges({
+                                type: CONTROLLER_CHANGE_APP_SCREEN,
+                                payload: 'app.payment.2'
+                            });						
                         }
-                    }                 
+                    }           
                 }
             }            
         }
