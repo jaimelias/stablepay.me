@@ -3,34 +3,34 @@ export const networks = {
 	ada: {
 		name: 'Cardano (ADA)',
 		explorer: 'https://cardanoscan.io/token/',
-		mainCoin: 'ada'		
+		networkMainAsset: 'ada'		
 	},
 	bsc: {
 		name: 'Binance Smart Chain (BEP-20)',
 		chainId: 56,
 		explorer: 'https://bscscan.com/token/',
-		mainCoin: 'bnb'
+		networkMainAsset: 'bnb'
 	},	
 	btc: {
 		name: 'Bitcoin (BTC)',
-		mainCoin: 'btc'
+		networkMainAsset: 'btc'
 	},	
 	eth: {
 		name: 'Ethereum (ERC-20)',
 		chainId: 1,
 		explorer: 'https://etherscan.io/token/',
-		mainCoin: 'eth'
+		networkMainAsset: 'eth'
 	},
 	matic: {
 		name: 'Polygon (MATIC)',
 		chainId: 137,
 		explorer: 'https://polygonscan.com/token/',
-		mainCoin: 'matic'
+		networkMainAsset: 'matic'
 	},
 	sol: {
 		name: 'Solana (SOL)',
 		explorer: 'https://solscan.io/token/',
-		mainCoin: 'sol'		
+		networkMainAsset: 'sol'		
 	}
 };
 

@@ -11,13 +11,13 @@ import WalletNotFoundComponent from './components/WalletNotFoundComponent';
 const RenderWalletComponent = () => {
 
   const params = useOutletContext();
-  const {walletPath} = params;
+  const {walletParam} = params;
   
   console.log(params);
 
   return (
       <>
-        {walletPath ? <>
+        {walletParam ? <>
           
           <WalletComponent
             {...params}
@@ -33,12 +33,11 @@ ReactDOM.render(
   <BrowserRouter>
     <Routes>
         <Route index element={<HomePage />} />
-        <Route path=":walletPath" element={<App />} >
+        <Route path=":walletParam" element={<App />} >
           <Route index element={<RenderWalletComponent />} />
-          <Route path=":networkPath" element={<RenderWalletComponent />} />
-          <Route path=":networkPath/:amountPath" element={<RenderWalletComponent />} />
-          <Route path=":networkPath/:assetPath" element={<RenderWalletComponent />} />
-          <Route path=":networkPath/:assetPath/:amountPath" element={<RenderWalletComponent />} />
+          <Route path=":networkParam" element={<RenderWalletComponent />} />
+          <Route path=":networkParam/:assetParam" element={<RenderWalletComponent />} />
+          <Route path=":networkParam/:assetParam/:amountParam" element={<RenderWalletComponent />} />
         </Route>
     </Routes>
   </BrowserRouter>

@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 const mapDispatchToProps = dispatch => (
 {
-	fetchWallet: walletPath => dispatch(fetchWallet(walletPath)),
+	fetchWallet: walletNameParam => dispatch(fetchWallet(walletNameParam)),
 	dispatchInputChanges: ({type, payload}) => dispatch(dispatchInputChanges({type, payload})),
 	updateNotification: payload => dispatch(updateNotification(payload))
 });
@@ -30,19 +30,16 @@ const mapStateToProps = state => ({
 class WalletComponent extends Component {
 
 	componentDidMount() {
-		const {walletPath} = this.props;
-		setTimeout(() => this.props.fetchWallet(walletPath), 1000);
+		const {walletNameParam} = this.props;
+		setTimeout(() => this.props.fetchWallet(walletNameParam), 1000);
 	}
-
-	
 
 	render() {
 
-		const {Controllers, Wallet, walletPath, networkPath, assetPath, amountPath, dispatchInputChanges, updateNotification, Config} = this.props;
+		const {Controllers, Wallet, walletNameParam, networkParam, assetParam, amountParam, walletParamError, dispatchInputChanges, updateNotification, Config} = this.props;
 		const {notification} = Controllers;
-		const {pathError} = Config;
 		const {status} = Wallet;
-
+		
 		return (
 
 			<Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -57,7 +54,7 @@ class WalletComponent extends Component {
 
 							<AvatarComponent Wallet={Wallet} />
 
-							{pathError ? <>
+							{walletParamError ? <>
 								<Button
 									component={Link}
 									size='small'
@@ -70,9 +67,9 @@ class WalletComponent extends Component {
 								<Transaction 
 									Controllers={Controllers} 
 									Wallet={Wallet}
-									amountPath={amountPath} 
-									networkPath={networkPath} 
-									assetPath={assetPath} 
+									amountParam={amountParam} 
+									networkParam={networkParam} 
+									assetParam={assetParam} 
 									dispatchInputChanges={dispatchInputChanges}
 									updateNotification={updateNotification}
 									Config={Config}
@@ -80,7 +77,7 @@ class WalletComponent extends Component {
 							</>}	
 				</> : ''}
 
-				{status === 'error' ? <><WalletNotFoundComponent walletPath={walletPath} /></> : ''}
+				{status === 'error' ? <><WalletNotFoundComponent walletNameParam={walletNameParam} /></> : ''}
 
 				<NotificationComponent 
 							updateNotification={updateNotification}

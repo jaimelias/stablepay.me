@@ -21,7 +21,7 @@ const testAccount = {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
             assets: ['usdt', 'usdc', 'eth']
         },
-        bnb: {
+        bsc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
             assets: ['usdt', 'usdc', 'bnb']
         },

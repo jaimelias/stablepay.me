@@ -30,10 +30,10 @@ export const getRecipient = ({network, Wallet}) => {
     return recipient;
 };
 
-export const filterCoins = ({Wallet, assets, network}) => filterCoinsByWallet({Wallet, assets: filterCoinsByNetwork({assets, network}), network});
+export const filterAssets = ({Wallet, assets, network}) => filterAssetsByWallet({Wallet, assets: filterAssetsByNetwork({assets, network}), network});
 
 
-export const filterCoinsByNetwork = ({assets, network}) => {
+export const filterAssetsByNetwork = ({assets, network}) => {
     let output = {}
 
     for(let c in assets)
@@ -47,7 +47,7 @@ export const filterCoinsByNetwork = ({assets, network}) => {
     return output;
 };
 
-export const filterCoinsByWallet = ({Wallet, assets, network}) => {
+export const filterAssetsByWallet = ({Wallet, assets, network}) => {
     const {data} = Wallet;
     let output = {};
 
@@ -78,3 +78,65 @@ export const isUrl = str => {
 
 	return (str) ? regex.test(str) : false;
 }
+
+export const validateAssetPath = ({assets, walletNameParam, networkParam, assetParam}) => {
+
+    let output = '';
+
+    if(walletNameParam && networkParam)
+    {
+      if(isValidSlug(assetParam))
+      {
+          if(assets.hasOwnProperty(assetParam))
+          {
+                if(assets[assetParam].addresses.hasOwnProperty(networkParam))
+                {
+                    output = assetParam;
+                }
+          }
+      }
+    }
+
+    return output;
+  };
+
+  export const validateWalletParams = ({Config, Params}) => {
+
+    const {networks, assets} = Config;
+
+    let walletParamError = false;
+
+    let {walletNameParam = '', networkParam = '', assetParam = '', amountParam = ''} = Params;
+
+    const validwalletParam = (isValidSlug(walletNameParam)) ? walletNameParam : '';
+    
+    const validNetworkPath = (isValidSlug(networkParam)) 
+        ? (networks.hasOwnProperty(networkParam)) 
+        ? networkParam 
+        : '' 
+        : '';
+
+    const validAssetPath = validateAssetPath({
+        assets, 
+        walletNameParam: validwalletParam, 
+        networkParam: validNetworkPath, 
+        assetParam: assetParam
+    });
+
+    const validAmountPath = (validwalletParam && validNetworkPath && validAssetPath && !isInvalidAmountString(amountParam)) 
+        ? round({val: amountParam, precision: assets[validAssetPath].decimals}).toString() 
+        : '';
+
+    walletParamError = (walletNameParam && !validwalletParam) ? true : false;
+    walletParamError = (networkParam && !validNetworkPath) ? true : false;
+    walletParamError = (assetParam && !validAssetPath) ? true : false;
+    walletParamError = (amountParam && !validAmountPath) ? true : false;
+
+    return {
+        walletNameParam: validwalletParam, 
+        networkParam: validNetworkPath, 
+        assetParam: validAssetPath, 
+        amountParam: validAmountPath,
+        walletParamError
+    };
+}; 

@@ -10,9 +10,9 @@ import { Outlet, useParams } from "react-router-dom";
 import  { ConfigureStore } from './redux/configureStore';
 import {themeConfig} from './assets/theme';
 import * as Config from './assets/config';
-import {isValidSlug, isInvalidAmountString} from './utilities/utilities';
+import {validateWalletParams} from './utilities/utilities';
+import { MoralisProvider } from "react-moralis";
 
-const {networks, assets} = Config;
 
 const store = ConfigureStore();
 
@@ -20,113 +20,8 @@ const theme = createTheme(themeConfig);
 
 export const App = () => {
 
-	const {walletPath = '', networkPath = '', assetPath = '', amountPath = ''} = useParams();
-	const filterWalletPath = (isValidSlug(walletPath)) ? walletPath : '';
-	const filterNetworkPath = (isValidSlug(networkPath)) ? (networks.hasOwnProperty(networkPath)) ? networkPath : '' : '';
-	let filterAmountPath = (!isInvalidAmountString(amountPath)) ? amountPath : '';
-	let pathError = false;
-	
-	const findAssetPath = () => {
-  
-	  let output = '';
-  
-	  if(filterNetworkPath)
-	  {
-		const {mainCoin} = networks[filterNetworkPath];
-
-		if(isValidSlug(assetPath))
-		{
-			if(assets.hasOwnProperty(assetPath))
-			{
-				if(assets[assetPath].addresses.hasOwnProperty(filterNetworkPath))
-				{
-					output = assetPath;
-				}
-			}
-			else
-			{
-				if(assets[mainCoin].addresses.hasOwnProperty(filterNetworkPath))
-				{
-					if(assets[mainCoin].addresses[filterNetworkPath] === true)
-					{
-						output = mainCoin;
-					}
-				}
-			}
-		}
-		else {
-
-			if(isValidSlug(amountPath))
-			{
-				if(filterAmountPath)
-				{
-					if(assetPath !== '' || mainCoin === filterNetworkPath)
-					{
-						if(assets.hasOwnProperty(mainCoin))
-						{
-							if(assets[mainCoin].addresses.hasOwnProperty(filterNetworkPath))
-							{
-								output = mainCoin;
-							}
-						}
-					}
-				}
-				else{
-
-					if(assets.hasOwnProperty(amountPath))
-					{
-						if(assets[amountPath].addresses.hasOwnProperty(filterNetworkPath))
-						{
-							output = amountPath;
-						}
-						else
-						{
-							console.log('assetPath not found in network');
-							pathError = true;
-							output = mainCoin;
-						}
-					}
-					else
-					{
-						console.log('invalid assetPath');
-						pathError = true;
-						output = mainCoin;
-					}
-				}
-			}
-			else
-			{
-				if(filterAmountPath !== '')
-				{
-					if(assets[mainCoin].addresses.hasOwnProperty(filterNetworkPath))
-					{
-						if(assets[mainCoin].addresses[filterNetworkPath] === true)
-						{
-							output = mainCoin;
-						}
-					}
-				}
-			}			
-		}
-
-	  }
-
-	  return output;
-	};
-
-	const filterAssetPath = findAssetPath();
-	filterAmountPath = (filterWalletPath && filterNetworkPath && filterAssetPath && filterAmountPath) ? amountPath : '';
-
-
-	const constextObj = {
-		pathError,
-		walletPath: filterWalletPath, 
-		networkPath: filterNetworkPath, 
-		assetPath: filterAssetPath, 
-		amountPath: filterAmountPath,
-		Config: {...Config, pathError}
-	};
-
+	const Params = useParams();
+	const constextObj = validateWalletParams({Config, Params});
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -134,9 +29,11 @@ export const App = () => {
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-					<Provider store={store}>
-						<Outlet context={constextObj}/>
-					</Provider>	
+					<MoralisProvider serverUrl="https://hepiqowzi15v.usemoralis.com:2053/server" appId="wdxGqDslKg2m84Q9OY3dzLIxGAb5a4lzEtXM7kMs">
+						<Provider store={store}>
+								<Outlet context={{...constextObj, Config}}/>
+						</Provider>	
+					</MoralisProvider>
 				</Box>
 			</Container>
 			

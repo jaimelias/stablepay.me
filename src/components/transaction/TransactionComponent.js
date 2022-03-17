@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PaymentConfigComponent from './PaymentConfigComponent';
 import PaymentConfirmationComponent from './PaymentConfirmComponent';
 import Box from '@mui/material/Box';
-import  {filterCoins, isInvalidAmountString, round} from '../../utilities/utilities';
+import  {filterAssets, round} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
 import {StepsComponent} from '../elements/appElements';
 
@@ -14,54 +14,50 @@ export default class Payment extends Component {
 
         const { dispatchInputChanges, Config, Wallet, Controllers} = this.props;
         const {appScreen} = Controllers;
-        const {networks, assets} = Config;
-		let {amountPath, networkPath, assetPath} = this.props;
+        const {assets} = Config;
+		let {amountParam, networkParam, assetParam} = this.props;
         let network = '';
         let asset = '';
         let amount = '';
 
-        if(networkPath)
+        if(networkParam)
         {
-            network = networkPath;
+            network = networkParam;
 
             if(network)
             {
-                let availableCoins = filterCoins({Wallet, network, assets});
-                const {mainCoin} = networks[network];
+                let availableAssets = filterAssets({Wallet, network, assets});
 
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_NETWORK,
-                    payload: {network, assets: availableCoins}
+                    payload: {network, assets: availableAssets}
                 });
 
-                asset = assetPath;
+                asset = assetParam;
 
                 if(network && asset)
                 {					
-                    if(assets[asset].addresses.hasOwnProperty(network))
+                    dispatchInputChanges({
+                        type: CONTROLLER_SELECT_ASSET,
+                        payload: asset || ''
+                    });
+                    
+                    if(amountParam)
                     {
+                        amount = amountParam;
                         const decimals = assets[asset].decimals;
                         amount = round({val: amount, precision: decimals});
 
-                        
                         dispatchInputChanges({
-                            type: CONTROLLER_SELECT_ASSET,
-                            payload: asset || ''
-                        });
-                        
-                        if(amount)
-                        {
-                            dispatchInputChanges({
-                                type: CONTROLLER_CHANGE_AMOUNT,
-                                payload: amount.toString() || ''
-                            });	
+                            type: CONTROLLER_CHANGE_AMOUNT,
+                            payload: amount.toString() || ''
+                        });	
 
-                            dispatchInputChanges({
-                                type: CONTROLLER_CHANGE_APP_SCREEN,
-                                payload: 'app.payment.2'
-                            });						
-                        }
-                    }           
+                        dispatchInputChanges({
+                            type: CONTROLLER_CHANGE_APP_SCREEN,
+                            payload: 'app.payment.2'
+                        });						
+                    }  
                 }
             }            
         }

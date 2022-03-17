@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Link } from 'react-router-dom';
-import  {isInvalidAmountString, isValidAmountTyping, round, filterCoins} from '../../utilities/utilities';
+import  {isInvalidAmountString, isValidAmountTyping, round, filterAssets, validateWalletParams} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
 
@@ -26,43 +26,44 @@ export default class PaymentConfigComponent extends Component {
         super(props);
         this.handleAmountChange = this.handleAmountChange.bind(this);
         this.handleNetworkSelect = this.handleNetworkSelect.bind(this);
-        this.handleCoinSelect = this.handleCoinSelect.bind(this);
+        this.handleAssetSelect = this.handleAssetSelect.bind(this);
         this.handleGoConfirmComponent = this.handleGoConfirmComponent.bind(this);
     }
 
-    handleAmountChange(amount){
+    handleAmountChange(amountParam){
 
         const {dispatchInputChanges} = this.props;
 
-        if(isValidAmountTyping(amount))
+        if(isValidAmountTyping(amountParam))
         {
             //validats the amount while typing
             
             dispatchInputChanges({
                 type: CONTROLLER_CHANGE_AMOUNT,
-                payload: amount || ''
+                payload: amountParam || ''
             });
         }
     };
 
-    handleNetworkSelect(network){
+    handleNetworkSelect(networkParam){
         const {dispatchInputChanges, Config, Controllers, Wallet} = this.props;
         let {asset} = Controllers;
         const {networks, assets} = Config;
 
-        if(networks.hasOwnProperty(network))
+        if(networks.hasOwnProperty(networkParam))
         {
 
-            let availableCoins = filterCoins({Wallet, assets, network});
+            const {networkMainAsset} = networks[networkParam]
+            let availableAssets = filterAssets({Wallet, assets, network: networkParam});
 
             //sets the network and assets
             dispatchInputChanges({
                 type: CONTROLLER_SELECT_NETWORK,
-                payload: {network, assets: availableCoins}
+                payload: {network: networkParam, assets: availableAssets}
             });
 
              // unsets asset if not available in network
-            if(!availableCoins.hasOwnProperty(asset))
+            if(!availableAssets.hasOwnProperty(asset))
             {
                 dispatchInputChanges({
                     type: CONTROLLER_SELECT_ASSET,
@@ -71,25 +72,25 @@ export default class PaymentConfigComponent extends Component {
 
                 
                 //if there is only one asset in the network set is as default
-                if(availableCoins.hasOwnProperty(network))
+                if(availableAssets.hasOwnProperty(networkMainAsset))
                 {
                     dispatchInputChanges({
                         type: CONTROLLER_SELECT_ASSET,
-                        payload: network || ''
+                        payload: networkMainAsset || ''
                     }); 
                 }                
             }
         }
     }
 
-    handleCoinSelect(asset){
+    handleAssetSelect(assetParam){
         const {dispatchInputChanges, Controllers} = this.props;
         const {assets} = Controllers;
-        if(assets.hasOwnProperty(asset) || asset === '')
+        if(assets.hasOwnProperty(assetParam) || assetParam === '')
         {
             dispatchInputChanges({
                 type: CONTROLLER_SELECT_ASSET,
-                payload: asset || ''
+                payload: assetParam || ''
             });   
         }
     };    
@@ -122,7 +123,7 @@ export default class PaymentConfigComponent extends Component {
         const {networks} = Config;
         const {amount, network, asset, assets} = Controllers;
         const isInvalidAmount = (asset && network) ? isInvalidAmountString(amount) : true;
-        let availableCoins = Object.keys(assets);
+        let availableAssets = Object.keys(assets);
 
         let cofirmArr = [Wallet.data.name];
 
@@ -130,10 +131,7 @@ export default class PaymentConfigComponent extends Component {
         {
             cofirmArr.push(network);
 
-            if(network !== asset)
-            {
-                cofirmArr.push(asset);
-            }
+            cofirmArr.push(asset);
 
             if(!isInvalidAmount)
             {
@@ -169,12 +167,12 @@ export default class PaymentConfigComponent extends Component {
                             disabled={!network}
                             aria-label="asset"
                             name="asset"
-                            onChange={event => this.handleCoinSelect(event.target.value)}
+                            onChange={event => this.handleAssetSelect(event.target.value)}
                             value={asset}
                             >
                             {
                             
-                            availableCoins
+                            availableAssets
                                 .map(v => <FormControlLabel key={v} value={v} control={<Radio />} label={assets[v].name} />)
                             }
                         </RadioGroup>
@@ -213,6 +211,7 @@ const AmountField = ({network, asset, amount, handleAmountChange}) => (
         label={'Amount'}
         onChange={event => handleAmountChange(event.target.value)}
         value={amount || ''}
+        autoComplete="off"
         InputProps={{
             startAdornment: (
                 <InputAdornment position="start">
