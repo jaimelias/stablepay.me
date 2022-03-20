@@ -8,11 +8,14 @@ const bscIcon = '/svg/crypto/bsc.svg';
 const maticIcon = '/svg/crypto/matic.svg';
 const adaIcon = '/svg/crypto/ada.svg';
 const solIcon = '/svg/crypto/sol.svg';
+const ustIcon = '/svg/crypto/ust.svg';
+const daiIcon = '/svg/crypto/dai.svg';
+const xautIcon = '/svg/crypto/xaut.svg';
 const copyIcon = '/svg/icons/copy.svg';
 const dollarIcon = '/svg/icons/dollar.svg';
 const metamaskIcon = '/svg/icons/metamask.svg';
 
 
-export const cryptoIcons = {usdtIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, bscIcon, maticIcon, adaIcon, solIcon};
+export const cryptoIcons = {usdtIcon, usdcIcon, busdIcon, btcIcon, ethIcon, bnbIcon, bscIcon, maticIcon, adaIcon, solIcon, ustIcon, daiIcon, xautIcon};
 export const appIcons = {copyIcon, dollarIcon};
 export const walletIcons = {metamaskIcon};

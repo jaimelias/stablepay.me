@@ -27,25 +27,7 @@ export default class Payment extends Component {
     {
         const { dispatchInputChanges } = this.props;
 
-        dispatchInputChanges({
-            type: CONTROLLER_SELECT_NETWORK,
-            payload: {network: '', assets: {}}
-        });
-
-        dispatchInputChanges({
-            type: CONTROLLER_SELECT_ASSET,
-            payload: ''
-        });
-
-        dispatchInputChanges({
-            type: CONTROLLER_CHANGE_AMOUNT,
-            payload: ''
-        });
-
-        dispatchInputChanges({
-            type: CONTROLLER_CHANGE_APP_SCREEN,
-            payload: 'app.payment.1'
-        });	
+        ResetWallet({dispatchInputChanges});
 
     }
     componentDidMount(){
@@ -191,6 +173,28 @@ export default class Payment extends Component {
     };
 };
 
+
+const ResetWallet = ({dispatchInputChanges}) => {
+    dispatchInputChanges({
+        type: CONTROLLER_SELECT_NETWORK,
+        payload: {network: '', assets: {}}
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_SELECT_ASSET,
+        payload: ''
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_CHANGE_AMOUNT,
+        payload: ''
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_CHANGE_APP_SCREEN,
+        payload: 'app.payment.1'
+    });	
+};
 
 const RenderWalletTemplate = ({children}) => (
     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

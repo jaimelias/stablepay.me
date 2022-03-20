@@ -19,7 +19,7 @@ const testAccount = {
     data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            assets: ['usdt', 'usdc', 'eth']
+            assets: ['usdt', 'usdc', 'eth', 'xaut', 'dai', 'ust']
         },
         bsc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',

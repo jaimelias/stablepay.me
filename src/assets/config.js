@@ -104,6 +104,27 @@ export const assets = {
 				matic: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
 				sol: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 		}
+	},
+	xaut: {
+		name: 'Tether Gold (XAUT)',
+		decimals: 6,
+		addresses: {
+			eth: '0x68749665FF8D2d112Fa859AA293F07A622782F38'
+		}
+	},
+	dai: {
+		name: 'Multi-Collateral Dai  (DAI)',
+		decimals: 6,
+		addresses: {
+			eth: '0x6b175474e89094c44da98b954eedeac495271d0f'
+		}
+	},
+	ust: {
+		name: 'TerraUSD (UST)',
+		decimals: 18,
+		addresses: {
+			eth: '0x6b175474e89094c44da98b954eedeac495271d0f'
+		}
 	}
 };
 
