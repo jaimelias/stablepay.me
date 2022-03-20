@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Link } from 'react-router-dom';
-import  {isInvalidAmountString, isValidAmountTyping, round, filterAssets, validateWalletParams} from '../../utilities/utilities';
+import  {isInvalidAmountString, isValidAmountTyping, round, filterAssets} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
 

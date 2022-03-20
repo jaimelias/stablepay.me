@@ -5,17 +5,55 @@ import Box from '@mui/material/Box';
 import  {filterAssets, round} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
 import {StepsComponent} from '../elements/appElements';
+import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
+import {AvatarComponent} from '../AvatarComponent';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
+import WalletNotFoundComponent from '../WalletNotFoundComponent';
+
+
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 export default class Payment extends Component {
 
+    constructor(props){
+        super(props);
+
+        this.handleResetWalletParams = this.handleResetWalletParams.bind(this);
+    }
+    handleResetWalletParams()
+    {
+        const { dispatchInputChanges } = this.props;
+
+        dispatchInputChanges({
+            type: CONTROLLER_SELECT_NETWORK,
+            payload: {network: '', assets: {}}
+        });
+
+        dispatchInputChanges({
+            type: CONTROLLER_SELECT_ASSET,
+            payload: ''
+        });
+
+        dispatchInputChanges({
+            type: CONTROLLER_CHANGE_AMOUNT,
+            payload: ''
+        });
+
+        dispatchInputChanges({
+            type: CONTROLLER_CHANGE_APP_SCREEN,
+            payload: 'app.payment.1'
+        });	
+
+    }
     componentDidMount(){
 
-        const { dispatchInputChanges, Config, Wallet, Controllers} = this.props;
+        const { dispatchInputChanges, Config, Wallet, Controllers, UrlParams} = this.props;
+        const {amountParam, networkParam, assetParam} = UrlParams;
         const {appScreen} = Controllers;
         const {assets} = Config;
-		let {amountParam, networkParam, assetParam} = this.props;
         let network = '';
         let asset = '';
         let amount = '';
@@ -90,32 +128,77 @@ export default class Payment extends Component {
 
     render(){
 
-        const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification} = this.props;
+        const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification, UrlParams} = this.props;
+        const {walletNameParam, walletParamError} = UrlParams;
+        const {status} = Wallet;
         const {appScreen} = Controllers;
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
 
+        const avatar = <AvatarComponent walletNameParam={walletNameParam} />;
+        const metaData = (
+            <Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <CircularProgress />
+            </Box>
+        );
+        const fixParamsButton = (
+            <Button
+                component={Link}
+                size='small'
+                to={`/${Wallet.data.name}`}
+                fullWidth
+                type="button"
+                variant='contained'
+                onClick={() => this.handleResetWalletParams()}
+                >{'Reload the App'}</Button>
+        );
+
         return (
-            <>
 
-                <Box sx={{mb: 3}}>
-                  <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
-                </Box>                
+            <RenderWalletTemplate>
 
-                <RenderAppScreen
-                    appScreen={appScreen}
-                    dispatchInputChanges={dispatchInputChanges}
-                    Controllers={Controllers}
-                    Wallet={Wallet}
-                    Config={Config}
-                    updateNotification={updateNotification}                
-                />
+                {status === 'loading' ? <>
+                    {avatar}
+                    {metaData}
+                </> : '' }
+                
+                {status === 'ok' ? <>
+                    {avatar}
+                            {walletParamError ? <>
+                                {fixParamsButton}
+                            </> : <>
+                                <Box sx={{mb: 3}}>
+                                  <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
+                                </Box>                
 
-            </>
+                                <RenderAppScreen
+                                    appScreen={appScreen}
+                                    dispatchInputChanges={dispatchInputChanges}
+                                    Controllers={Controllers}
+                                    Wallet={Wallet}
+                                    Config={Config}
+                                    updateNotification={updateNotification}                
+                                    />							
+                            </>}	
+                </> : ''}
+
+                {status === 'error' ? <><WalletNotFoundComponent walletNameParam={walletNameParam} /></> : ''}
+
+            </RenderWalletTemplate>
+
         );
 
     };
 };
+
+
+const RenderWalletTemplate = ({children}) => (
+    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+            {children}
+        </Paper>
+    </Box>
+);
 
 const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, Config, updateNotification}) => (<>
     {appScreen === 'app.payment.1' ? <>

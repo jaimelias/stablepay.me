@@ -127,10 +127,22 @@ export const validateAssetPath = ({assets, walletNameParam, networkParam, assetP
         ? round({val: amountParam, precision: assets[validAssetPath].decimals}).toString() 
         : '';
 
-    walletParamError = (walletNameParam && !validwalletParam) ? true : false;
-    walletParamError = (networkParam && !validNetworkPath) ? true : false;
-    walletParamError = (assetParam && !validAssetPath) ? true : false;
-    walletParamError = (amountParam && !validAmountPath) ? true : false;
+    if(walletNameParam && !validwalletParam)
+    {
+        walletParamError = true;
+    }
+    if(networkParam && !validNetworkPath)
+    {
+        walletParamError = true;
+    }
+    if(assetParam && !validAssetPath)
+    {
+        walletParamError = true;
+    }
+    if(amountParam && !validAmountPath)
+    {
+        walletParamError = true;
+    }
 
     return {
         walletNameParam: validwalletParam, 
