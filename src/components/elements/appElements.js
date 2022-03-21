@@ -64,7 +64,7 @@ export const NotificationComponent = ({updateNotification, notification}) => {
     };
 
 	return(
-		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
 			<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
 				{message}
 			</Alert>

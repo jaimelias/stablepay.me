@@ -49,9 +49,15 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
     dispatch({type, payload});
 };
 
-export const fetchWallet = walletPath => dispatch => {
+export const fetchWallet = walletNameParam => dispatch => {
 
-      dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
+    if(walletNameParam === 'jaimelias')
+    {
+        dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
+    }
+    else {
+        dispatch({type: actionTypes.WALLET_ERROR, payload: `wallet ${walletNameParam} not found`});
+    }
 };
 
 export const updateNotification = payload => dispatch => {

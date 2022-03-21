@@ -6,12 +6,9 @@ import  {filterAssets, round} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
 import {StepsComponent} from '../elements/appElements';
 import Paper from '@mui/material/Paper';
-import CircularProgress from '@mui/material/CircularProgress';
-import {AvatarComponent} from '../AvatarComponent';
+import {AvatarComponent} from '../elements/AvatarComponent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import WalletNotFoundComponent from '../WalletNotFoundComponent';
-
 
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
@@ -112,17 +109,12 @@ export default class Payment extends Component {
 
         const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification, UrlParams} = this.props;
         const {walletNameParam, walletParamError} = UrlParams;
-        const {status} = Wallet;
         const {appScreen} = Controllers;
         const appScreenArr = appScreen.split('.');
         const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
 
         const avatar = <AvatarComponent walletNameParam={walletNameParam} />;
-        const metaData = (
-            <Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <CircularProgress />
-            </Box>
-        );
+
         const fixParamsButton = (
             <Button
                 component={Link}
@@ -139,32 +131,25 @@ export default class Payment extends Component {
 
             <RenderWalletTemplate>
 
-                {status === 'loading' ? <>
-                    {avatar}
-                    {metaData}
-                </> : '' }
-                
-                {status === 'ok' ? <>
-                    {avatar}
-                            {walletParamError ? <>
-                                {fixParamsButton}
-                            </> : <>
-                                <Box sx={{mb: 3}}>
-                                  <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
-                                </Box>                
+                {avatar}
 
-                                <RenderAppScreen
-                                    appScreen={appScreen}
-                                    dispatchInputChanges={dispatchInputChanges}
-                                    Controllers={Controllers}
-                                    Wallet={Wallet}
-                                    Config={Config}
-                                    updateNotification={updateNotification}                
-                                    />							
-                            </>}	
-                </> : ''}
+                {walletParamError ? <>
+                    {fixParamsButton}
+                </> : <>
+                    <Box sx={{mb: 3}}>
+                        <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
+                    </Box>                
 
-                {status === 'error' ? <><WalletNotFoundComponent walletNameParam={walletNameParam} /></> : ''}
+                    <RenderAppScreen
+                        appScreen={appScreen}
+                        dispatchInputChanges={dispatchInputChanges}
+                        Controllers={Controllers}
+                        Wallet={Wallet}
+                        Config={Config}
+                        updateNotification={updateNotification}                
+                        />							
+                </>}	
+
 
             </RenderWalletTemplate>
 

@@ -21,16 +21,17 @@ const mapStateToProps = state => ({
 class MainComponent extends Component {
 
 	componentDidMount() {
-		const {walletNameParam} = this.props;
-		setTimeout(() => this.props.fetchWallet(walletNameParam), 1000);
+		const {fetchWallet, UrlParams} = this.props;
+
+		const {walletNameParam} = UrlParams;
+
+		setTimeout(() => fetchWallet(walletNameParam), 1000);
 	}
 
 	render() {
 
 		const {Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config} = this.props;
 		const {notification} = Controllers;
-
-		console.log(UrlParams);
 		
 		return (<>
 

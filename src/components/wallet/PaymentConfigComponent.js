@@ -15,7 +15,6 @@ import  {isInvalidAmountString, isValidAmountTyping, round, filterAssets} from '
 import * as actionTypes from '../../redux/actionTypes';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
 
-
 const {dollarIcon} = appIcons;
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
@@ -193,6 +192,7 @@ export default class PaymentConfigComponent extends Component {
                     type="button" 
                     fullWidth
                     size="small"
+                    
                     component={network && asset && !isInvalidAmount ? Link : 'button'}
                     to={network && asset && !isInvalidAmount ? `/${cofirmPath}` : ''}
                     onClick={() => this.handleGoConfirmComponent()}
