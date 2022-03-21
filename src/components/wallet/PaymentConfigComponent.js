@@ -11,7 +11,8 @@ import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Link } from 'react-router-dom';
-import  {isInvalidAmountString, isValidAmountTyping, round, filterAssets} from '../../utilities/utilities';
+import  {round, filterAssets} from '../../utilities/utilities';
+import  {isInvalidAmountString, isValidAmountTyping} from '../../utilities/validators';
 import * as actionTypes from '../../redux/actionTypes';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
 
@@ -152,7 +153,7 @@ export default class PaymentConfigComponent extends Component {
                         onChange={event => this.handleNetworkSelect(event.target.value)}
                         >
                     {
-                        Object.keys(networks).map(v => <MenuItem value={v} key={v}>{networks[v].name}</MenuItem>)
+                        Object.keys(networks).map(v => <MenuItem value={v} key={v}>{<img style={{marginRight: '8px'}} width="20" height="20" src={cryptoIcons[`${v}Icon`]} alt={v}/>}{networks[v].name}</MenuItem>)
                     }
         
                     </Select>

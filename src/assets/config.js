@@ -107,7 +107,7 @@ export const assets = {
 	},
 	xaut: {
 		name: 'Tether Gold (XAUT)',
-		decimals: 6,
+		decimals: 18,
 		addresses: {
 			eth: '0x68749665FF8D2d112Fa859AA293F07A622782F38'
 		}
@@ -124,6 +124,13 @@ export const assets = {
 		decimals: 18,
 		addresses: {
 			eth: '0x6b175474e89094c44da98b954eedeac495271d0f'
+		}
+	},
+	wbtc: {
+		name: 'Wrapped Bitcoin (WBTC)',
+		decimals: 8,
+		addresses: {
+			eth: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
 		}
 	}
 };

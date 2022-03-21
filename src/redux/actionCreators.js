@@ -1,11 +1,13 @@
 import  * as actionTypes from './actionTypes';
+import {isParamNotInBlockList} from '../utilities/validators';
+const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 
 const testAccount = {
     network: 'eth',
     name: 'jaimelias',
     settings: {
-        theme: {
+        themeConfig: {
             backgroundColor: 'dark',
             actionColor: '#ffcc00',
         },
@@ -19,7 +21,7 @@ const testAccount = {
     data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            assets: ['usdt', 'usdc', 'eth', 'xaut', 'dai', 'ust']
+            assets: ['usdt', 'usdc', 'eth', 'xaut', 'dai', 'ust', 'wbtc']
         },
         bsc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
@@ -51,15 +53,40 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
 
 export const fetchWallet = walletNameParam => dispatch => {
 
-    if(walletNameParam === 'jaimelias')
-    {
-        dispatch({type: actionTypes.WALLET_OK, payload: testAccount});
-    }
-    else {
-        dispatch({type: actionTypes.WALLET_ERROR, payload: `wallet ${walletNameParam} not found`});
-    }
+    isParamNotInBlockList(walletNameParam).then(validWalletName => {
+        if(validWalletName)
+        {
+            dispatch({type: WALLET_OK, payload: testAccount});
+        }
+        else {
+            dispatch({type: WALLET_ERROR, payload: `wallet ${walletNameParam} not found`});
+        }
+    });
+
 };
 
 export const updateNotification = payload => dispatch => {
-    dispatch({type: actionTypes.CONTROLLER_UPDATE_NOTIFICATION, payload});
+    dispatch({type: CONTROLLER_UPDATE_NOTIFICATION, payload});
+};
+
+export const ResetWallet = ({dispatchInputChanges}) => {
+    dispatchInputChanges({
+        type: CONTROLLER_SELECT_NETWORK,
+        payload: {network: '', assets: {}}
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_SELECT_ASSET,
+        payload: ''
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_CHANGE_AMOUNT,
+        payload: ''
+    });
+
+    dispatchInputChanges({
+        type: CONTROLLER_CHANGE_APP_SCREEN,
+        payload: 'app.payment.1'
+    });	
 };

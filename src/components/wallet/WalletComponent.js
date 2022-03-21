@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import {AvatarComponent} from '../elements/AvatarComponent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import {ResetWallet} from '../../redux/actionCreators';
 
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
@@ -159,27 +160,7 @@ export default class Payment extends Component {
 };
 
 
-const ResetWallet = ({dispatchInputChanges}) => {
-    dispatchInputChanges({
-        type: CONTROLLER_SELECT_NETWORK,
-        payload: {network: '', assets: {}}
-    });
 
-    dispatchInputChanges({
-        type: CONTROLLER_SELECT_ASSET,
-        payload: ''
-    });
-
-    dispatchInputChanges({
-        type: CONTROLLER_CHANGE_AMOUNT,
-        payload: ''
-    });
-
-    dispatchInputChanges({
-        type: CONTROLLER_CHANGE_APP_SCREEN,
-        payload: 'app.payment.1'
-    });	
-};
 
 const RenderWalletTemplate = ({children}) => (
     <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
@@ -206,6 +187,7 @@ const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, 
         Wallet={Wallet}
         Config={Config}
         updateNotification={updateNotification}
+        ResetWallet={ResetWallet}
       />
     </> : ''}
 </>);

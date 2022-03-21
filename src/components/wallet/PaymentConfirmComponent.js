@@ -10,10 +10,8 @@ import { Link } from 'react-router-dom';
 import  {abbreviateAddress, getRecipient} from '../../utilities/utilities';
 import {CopyListItem} from '../elements/appElements';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
-import * as actionTypes from '../../redux/actionTypes';
 
 const {copyIcon} = appIcons;
-const {CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 export default class PaymentConfirmationComponent extends Component {
 
@@ -39,12 +37,9 @@ export default class PaymentConfirmationComponent extends Component {
     }
 
     handleGoConfigComponent(){
-        const {dispatchInputChanges} = this.props;
+        const {dispatchInputChanges, ResetWallet} = this.props;
 
-        dispatchInputChanges({
-            type: CONTROLLER_CHANGE_APP_SCREEN,
-            payload: 'app.payment.1'
-        });
+        ResetWallet({dispatchInputChanges});
     }
 
     render()
