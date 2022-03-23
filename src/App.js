@@ -1,7 +1,6 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
 import './App.css';
 import "@fontsource/raleway";
 import  { Provider } from 'react-redux';
@@ -25,16 +24,13 @@ export const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Container component="main" maxWidth="xs">
-				
-				
-					<MoralisProvider serverUrl="https://hepiqowzi15v.usemoralis.com:2053/server" appId="wdxGqDslKg2m84Q9OY3dzLIxGAb5a4lzEtXM7kMs">
-						<Provider store={store}>
-								<Outlet context={{...constextObj, Config}}/>
-						</Provider>	
-					</MoralisProvider>
-			</Container>
-			
+	
+			<MoralisProvider serverUrl="https://hepiqowzi15v.usemoralis.com:2053/server" appId="wdxGqDslKg2m84Q9OY3dzLIxGAb5a4lzEtXM7kMs">
+				<Provider store={store}>
+						<Outlet context={{...constextObj, Config}}/>
+				</Provider>	
+			</MoralisProvider>
+
 		</ThemeProvider>
 	);
 };

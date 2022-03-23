@@ -5,7 +5,11 @@ export const themeConfig = {
     palette: {
 		mode: 'light',
         primary: {
-            main: '#ffcc00'
+            main: '#000000'
+        },
+        background: {
+            default: '#dddddd',
+            paper: '#84ffff'
         }
     },
     components: {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import  {fetchWallet, dispatchInputChanges, updateNotification} from '../redux/actionCreators';
 import {NotificationComponent} from './elements/appElements';
 import { Outlet } from 'react-router-dom';
-
+import AppBarComponent from './elements/AppBarComponent';
 
 const mapDispatchToProps = dispatch => (
 {
@@ -34,6 +34,8 @@ class MainComponent extends Component {
 		const {notification} = Controllers;
 		
 		return (<>
+
+			<AppBarComponent />
 
 			<Outlet context={{Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
 

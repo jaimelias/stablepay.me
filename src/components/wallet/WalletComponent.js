@@ -10,6 +10,8 @@ import {AvatarComponent} from '../elements/AvatarComponent';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import {ResetWallet} from '../../redux/actionCreators';
+import Container from '@mui/material/Container';
+
 
 
 const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
@@ -163,11 +165,13 @@ export default class Payment extends Component {
 
 
 const RenderWalletTemplate = ({children}) => (
-    <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-            {children}
-        </Paper>
-    </Box>
+    <Container component="main" maxWidth="xs">
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Paper variant="outlined" sx={{width: '400px', my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
+                {children}
+            </Paper>
+        </Box>
+    </Container>
 );
 
 const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, Config, updateNotification}) => (<>

@@ -6,7 +6,7 @@ export const  AvatarComponent = ({walletNameParam}) => {
 
 	return (
 		<Box mb={3}>
-			<Typography mb={2} variant="h5" component="h1" align="center" >{'@'}{walletNameParam}</Typography>
+			<Typography mb={2} variant="h5" component="h1" align="center" sx={{ letterSpacing: 4 }}>{'@'}{walletNameParam}</Typography>
 		</Box>
 	);
 }

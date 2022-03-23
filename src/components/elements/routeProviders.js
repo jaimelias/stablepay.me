@@ -1,3 +1,4 @@
+import React from 'react';
 import MainComponent from '../MainComponent';
 import WalletComponent from '../wallet/WalletComponent';
 import { useOutletContext } from 'react-router-dom';

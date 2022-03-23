@@ -1,5 +1,7 @@
 import  * as actionTypes from './actionTypes';
 import {isParamNotInBlockList} from '../utilities/validators';
+import {getPalettes} from '../rarity/palettes';
+
 const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
 
 
@@ -52,6 +54,9 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
 };
 
 export const fetchWallet = walletNameParam => dispatch => {
+
+
+    console.log(getPalettes());
 
     isParamNotInBlockList(walletNameParam).then(validWalletName => {
         if(validWalletName)

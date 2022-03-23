@@ -15,6 +15,8 @@ import  {round, filterAssets} from '../../utilities/utilities';
 import  {isInvalidAmountString, isValidAmountTyping} from '../../utilities/validators';
 import * as actionTypes from '../../redux/actionTypes';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
+import Avatar from '@mui/material/Avatar';
+
 
 const {dollarIcon} = appIcons;
 
@@ -216,7 +218,12 @@ const AmountField = ({network, asset, amount, handleAmountChange}) => (
         InputProps={{
             startAdornment: (
                 <InputAdornment position="start">
-                    <img alt="paymentIcon" src={(!asset) ? dollarIcon : cryptoIcons[`${asset}Icon`]} width="20" height="20" />
+                    {asset ? <>
+                        <img alt="paymentIcon" src={cryptoIcons[`${asset}Icon`]} width="20" height="20" />
+                    </> : <>
+                        <Avatar alt="paymentIcon" sx={{width: 20, height: 20, fontSize: 12}} >$</Avatar>
+                    </>}
+
                 </InputAdornment>
             )
         }}
