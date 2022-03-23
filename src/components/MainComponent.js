@@ -1,49 +1,58 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  {fetchWallet, dispatchInputChanges, updateNotification} from '../redux/actionCreators';
+import  {fetchWallet, dispatchInputChanges, updateNotification, switchTheme} from '../redux/actionCreators';
 import {NotificationComponent} from './elements/appElements';
 import { Outlet } from 'react-router-dom';
 import AppBarComponent from './elements/AppBarComponent';
+import CssBaseline from '@mui/material/CssBaseline';
+
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const mapDispatchToProps = dispatch => (
 {
 	fetchWallet: walletNameParam => dispatch(fetchWallet(walletNameParam)),
 	dispatchInputChanges: ({type, payload}) => dispatch(dispatchInputChanges({type, payload})),
-	updateNotification: payload => dispatch(updateNotification(payload))
+	updateNotification: payload => dispatch(updateNotification(payload)),
+	switchTheme: payload => dispatch(switchTheme(payload)),
 });
 
-const mapStateToProps = state => ({
-	Wallet: state.Wallet,
-	Controllers: state.Controllers
-});
+const mapStateToProps = state => ({...state});
 
 
 class MainComponent extends Component {
 
 	componentDidMount() {
-		const {fetchWallet, UrlParams} = this.props;
+		const {fetchWallet, switchTheme, UrlParams} = this.props;
 
 		const {walletNameParam} = UrlParams;
 
-		setTimeout(() => fetchWallet(walletNameParam), 1000);
+		setTimeout(() => {
+			fetchWallet(walletNameParam);
+			switchTheme();
+		}, 500);
 	}
 
 	render() {
 
-		const {Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config} = this.props;
+		const {Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config, Theme} = this.props;
 		const {notification} = Controllers;
+		
+		const theme = createTheme(Theme.config);
 		
 		return (<>
 
-			<AppBarComponent />
+			<ThemeProvider theme={theme}>
+				<CssBaseline />
+				<AppBarComponent />
 
-			<Outlet context={{Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
+				<Outlet context={{Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
 
-			<NotificationComponent 
-                updateNotification={updateNotification}
-                notification={notification}
-                />
-			
+				<NotificationComponent 
+					updateNotification={updateNotification}
+					notification={notification}
+					/>
+			</ThemeProvider>
 		</>)
 
 	};

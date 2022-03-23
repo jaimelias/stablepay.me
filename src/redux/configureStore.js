@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Wallet } from './wallet';
 import { Controllers } from './controllers';
+import { Theme } from './theme';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
@@ -9,7 +10,8 @@ export const ConfigureStore = () => {
  
         combineReducers({
            Wallet,
-           Controllers
+           Controllers,
+           Theme
         }),
         applyMiddleware(thunk, logger)
     );

@@ -2,7 +2,7 @@ import  * as actionTypes from './actionTypes';
 import {isParamNotInBlockList} from '../utilities/validators';
 import {getPalettes} from '../rarity/palettes';
 
-const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
+const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN, THEME_SWITCH} = actionTypes;
 
 
 const testAccount = {
@@ -56,8 +56,6 @@ export const dispatchInputChanges = ({type, payload}) => dispatch => {
 export const fetchWallet = walletNameParam => dispatch => {
 
 
-    console.log(getPalettes());
-
     isParamNotInBlockList(walletNameParam).then(validWalletName => {
         if(validWalletName)
         {
@@ -95,3 +93,23 @@ export const ResetWallet = ({dispatchInputChanges}) => {
         payload: 'app.payment.1'
     });	
 };
+
+export const switchTheme = payload => dispatch => {
+    
+    let palette = {};
+    const palettes = getPalettes();
+    const palettesLenght = palettes.length;
+    const paperRandomIndex = Math.floor(Math.random() * palettesLenght);
+    const paper = palettes[paperRandomIndex];
+
+    console.log(paper);
+    
+    palette = {
+        mode: paper.mode,
+        background: {
+            paper: paper.colors.values.main
+        }
+    }
+
+    dispatch({type: THEME_SWITCH, payload: palette});
+}
