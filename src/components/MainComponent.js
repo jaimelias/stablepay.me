@@ -9,6 +9,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+
+
 const mapDispatchToProps = dispatch => (
 {
 	fetchWallet: walletNameParam => dispatch(fetchWallet(walletNameParam)),

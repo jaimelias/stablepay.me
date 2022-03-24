@@ -2,6 +2,9 @@
 import * as Colors from '@mui/material/colors';
 import {shadeHexColor} from '../utilities/utilities'
 
+const filterBgShades = palettes => palettes.filter(p => bgShades.includes(p.shade));
+const filterActionShades = palettes => palettes.filter(p => actionShades.includes(p.shade));
+
 const modes = ['light', 'dark'];
 
 const bgWithDarkText = {
@@ -30,7 +33,7 @@ const actionShades = ['A100', 'A200', 'A400', 'A700'];
 const bgShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 
 
-const ValidColors = {red: Colors.red, pink: Colors.pink}
+const ValidColors = Colors;
 
 
 export const getPalettes = () => {
@@ -57,27 +60,9 @@ export const getPalettes = () => {
         {
             for(let s in shades)
             {
-                let mode = 'dark';
-                const hex = shades[s];
-
-
-                if(bgWithDarkText[c].includes(s))
-                {
-                    mode = 'light';
-                }
-
-               // let light = shadeHexColor({color: hex, percent: 20});
-                //let dark =  shadeHexColor({color: hex, percent: -20});
-               // const divider = (mode === light) ? dark : light;
-              // const constrast = (mode === 'light') ? '#000' : '#fff';
-
                 ColorArr.push({
-                    mode,
-                    colors: {
-                        hex,
-                        color: c,
-                        shade: s
-                    }
+                    color: c,
+                    shade: s
                 });
             }
         }
@@ -102,14 +87,14 @@ export const generateMetadata = () => {
         for(let bg = 0; bg < validBgShadessLength; bg++)
         {
             const background = validBgShades[bg];
-            const background_color = background.colors.color;
-            const background_shade = background.colors.shade;
+            const background_color = background.color;
+            const background_shade = background.shade;
 
             for(let pr = 0; pr < validActionShadesLength; pr++)
             {
                 const primary = validActionShades[pr];
-                const primary_color = primary.colors.color;
-                const primary_shade = primary.colors.shade;
+                const primary_color = primary.color;
+                const primary_shade = primary.shade;
 
                 if(background_color !== primary_color)
                 {
@@ -117,10 +102,10 @@ export const generateMetadata = () => {
                     for(let se = 0; se < validActionShadesLength; se++)
                     {
                         const secondary = validActionShades[se];
-                        const secondary_color = secondary.colors.color;
-                        const secondary_shade = secondary.colors.shade;
+                        const secondary_color = secondary.color;
+                        const secondary_shade = secondary.shade;
 
-                        if(primary_color !== secondary_color)
+                        if(primary_color !== secondary_color && background_color !== secondary_color)
                         {
                             output.push({mode, background_color, background_shade, primary_color, primary_shade, secondary_color, secondary_shade});
                         }
@@ -132,6 +117,3 @@ export const generateMetadata = () => {
 
     return output;
 }
-
-const filterBgShades = palettes => palettes.filter(p => bgShades.includes(p.colors.shade));
-const filterActionShades = palettes => palettes.filter(p => actionShades.includes(p.colors.shade));

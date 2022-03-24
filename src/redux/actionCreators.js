@@ -1,6 +1,7 @@
 import  * as actionTypes from './actionTypes';
 import {isParamNotInBlockList} from '../utilities/validators';
 import {generateMetadata} from '../rarity/palettes';
+import * as Colors from '@mui/material/colors';
 
 const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN, THEME_SWITCH} = actionTypes;
 
@@ -96,42 +97,27 @@ export const ResetWallet = ({dispatchInputChanges}) => {
 
 export const switchTheme = payload => dispatch => {
 
+    const palettes = generateMetadata();
+    const palettesLenght = palettes.length;
+    const bgRandomIndex = Math.floor(Math.random() * palettesLenght);
+    const palette = palettes[bgRandomIndex];
 
-    console.log(generateMetadata());
-
-    return false;
-
-
-    const file = '/json/validColors.json';
-
-    return fetch(file).then(response => {
-        if(response.ok)
-        {
-            return response.json();
+    const {mode, background_color, background_shade, primary_color, primary_shade, secondary_color, secondary_shade} = palette;
+        
+    const theme = {
+        mode,
+        primary: {
+            main: Colors[primary_color][primary_shade]
+        },
+        secondary: {
+          main:   Colors[secondary_color][secondary_shade]
+        },
+        background: {
+            default: Colors[background_color][background_shade]
         }
-        else
-        {
-            throw Error(`${file} not found or not accesible`);
-        }
-    }).then(palettes => {
+    }
 
-        let palette = {};
-        const palettesLenght = palettes.length;
-        const bgRandomIndex = Math.floor(Math.random() * palettesLenght);
-        const background = palettes[bgRandomIndex];
+    dispatch({type: THEME_SWITCH, payload: theme});
 
-        console.log(JSON.stringify(palettes));
-            
-        palette = {
-            mode: background.mode,
-            background: {
-                default: background.colors.hex
-            }
-        }
 
-        dispatch({type: THEME_SWITCH, payload: palette});
-
-    }).catch(err => {
-        console.log(err.message);
-    });
 }

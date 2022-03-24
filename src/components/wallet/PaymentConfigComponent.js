@@ -195,7 +195,7 @@ export default class PaymentConfigComponent extends Component {
                     type="button" 
                     fullWidth
                     size="small"
-                    
+                    color="primary"
                     component={network && asset && !isInvalidAmount ? Link : 'button'}
                     to={network && asset && !isInvalidAmount ? `/${cofirmPath}` : ''}
                     onClick={() => this.handleGoConfirmComponent()}
