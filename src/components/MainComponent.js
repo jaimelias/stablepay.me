@@ -5,12 +5,7 @@ import {NotificationComponent} from './elements/appElements';
 import { Outlet } from 'react-router-dom';
 import AppBarComponent from './elements/AppBarComponent';
 import CssBaseline from '@mui/material/CssBaseline';
-
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
-
 
 
 const mapDispatchToProps = dispatch => (
@@ -41,14 +36,14 @@ class MainComponent extends Component {
 
 		const {Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config, Theme} = this.props;
 		const {notification} = Controllers;
-		
 		const theme = createTheme(Theme.config);
+		const {palette} = theme;
 		
 		return (<>
 
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<AppBarComponent />
+				<AppBarComponent palette={palette} />
 
 				<Outlet context={{Theme, Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
 

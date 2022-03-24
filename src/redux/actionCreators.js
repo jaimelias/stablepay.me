@@ -99,18 +99,34 @@ export const switchTheme = payload => dispatch => {
 
     const palettes = generateMetadata();
     const palettesLenght = palettes.length;
-    const bgRandomIndex = Math.floor(Math.random() * palettesLenght);
+    const bgRandomIndex = 0 || Math.floor(Math.random() * palettesLenght);
     const palette = palettes[bgRandomIndex];
 
-    const {mode, background_color, background_shade, primary_color, primary_shade, secondary_color, secondary_shade} = palette;
-        
+    const {
+        mode, 
+        background_color, 
+        background_shade, 
+        primary_color, 
+        primary_shade,
+        primary_contrast_text,
+        secondary_color,
+        secondary_shade,
+        secondary_contrast_text
+    } = palette;
+
     const theme = {
         mode,
         primary: {
-            main: Colors[primary_color][primary_shade]
+            main: Colors[primary_color][primary_shade],
+            contrastText: primary_contrast_text
         },
         secondary: {
-          main:   Colors[secondary_color][secondary_shade]
+          main:   Colors[secondary_color][secondary_shade],
+          contrastText: secondary_contrast_text,
+          args: {
+              color: secondary_color,
+              shade: secondary_shade
+          }
         },
         background: {
             default: Colors[background_color][background_shade]
