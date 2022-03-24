@@ -2,14 +2,16 @@ import {round} from './utilities';
 
 export const isParamNotInBlockList = async (val) => {
 
-    return fetch('/json/usernameBlockList.json').then(response => {
+    const file = '/json/usernameBlockList.json';
+
+    return fetch(file).then(response => {
         if(response.ok)
         {
             return response.json();
         }
         else
         {
-            throw Error('/json/usernameBlockList.json not found');
+            throw Error(`${file} not found or not accesible`);
         }
     }).then(json => {
         if(!json.includes(val))

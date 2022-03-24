@@ -2,6 +2,7 @@
 import * as Colors from '@mui/material/colors';
 import {shadeHexColor} from '../utilities/utilities'
 
+const modes = ['light', 'dark'];
 
 const bgWithDarkText = {
     red: ['50', '100', '200', '300', 'A100'],
@@ -25,13 +26,15 @@ const bgWithDarkText = {
     blueGrey: ['50', '100', '200', '300', 'A100', 'A200']
 }
 
+const actionShades = ['A100', 'A200', 'A400', 'A700'];
+const bgShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 
-const ValidColors = Colors;
+
+const ValidColors = {red: Colors.red, pink: Colors.pink}
 
 
 export const getPalettes = () => {
     let colorRanges = [];
-    let primarySecondary = [];
 
     for(let c in ValidColors)
     {
@@ -56,95 +59,79 @@ export const getPalettes = () => {
             {
                 let mode = 'dark';
                 const hex = shades[s];
-                let light = shadeHexColor({color: hex, percent: 20});
-                let dark =  shadeHexColor({color: hex, percent: -20});
+
 
                 if(bgWithDarkText[c].includes(s))
                 {
                     mode = 'light';
                 }
 
-                const divider = (mode === light) ? dark : light;
-
+               // let light = shadeHexColor({color: hex, percent: 20});
+                //let dark =  shadeHexColor({color: hex, percent: -20});
+               // const divider = (mode === light) ? dark : light;
+              // const constrast = (mode === 'light') ? '#000' : '#fff';
 
                 ColorArr.push({
                     mode,
                     colors: {
-                        values: {
-                            main: hex,
-                            light,
-                            dark
-                        },
+                        hex,
                         color: c,
-                        shade: s,
-                        divider,
-                        constrast: (mode === 'light') ? '#000' : '#fff'
+                        shade: s
                     }
                 });
             }
         }
     }
-
-
-
-
-
-    return ColorArr;
     
-    for(let secondaryColors in ValidColors)
+    return ColorArr;
+}
+
+export const generateMetadata = () => {
+
+    let output = [];
+    const palettes = getPalettes();
+    const validBgShades = filterBgShades(palettes);
+    const validBgShadessLength = validBgShades.length;
+    const validActionShades = filterActionShades(palettes);
+    const validActionShadesLength = validActionShades.length;
+
+    for(let m = 0; m < 2; m++)
     {
-        const secondaryShades = ValidColors[secondaryColors];
+        const mode = modes[m];
 
-        for(let sShades in secondaryShades)
+        for(let bg = 0; bg < validBgShadessLength; bg++)
         {
-            const secondary = secondaryShades[sShades];
+            const background = validBgShades[bg];
+            const background_color = background.colors.color;
+            const background_shade = background.colors.shade;
 
-            //PRIMARY
-            for(let primaryColors in ValidColors)
+            for(let pr = 0; pr < validActionShadesLength; pr++)
             {
-                if(secondaryColors !== primaryColors)
-                {
-                    const primaryShades = ValidColors[primaryColors];
-                
-                    for(let pShades in primaryShades)
-                    {
-                        const primary = primaryShades[pShades];
+                const primary = validActionShades[pr];
+                const primary_color = primary.colors.color;
+                const primary_shade = primary.colors.shade;
 
-                        primarySecondary.push({primary, secondary});
+                if(background_color !== primary_color)
+                {
+
+                    for(let se = 0; se < validActionShadesLength; se++)
+                    {
+                        const secondary = validActionShades[se];
+                        const secondary_color = secondary.colors.color;
+                        const secondary_shade = secondary.colors.shade;
+
+                        if(primary_color !== secondary_color)
+                        {
+                            output.push({mode, background_color, background_shade, primary_color, primary_shade, secondary_color, secondary_shade});
+                        }
                     }
                 }
-            }                
+            }
         }
     }
-
-
-    const flatColorRangesLength = colorRanges.length;
-
-    let output = primarySecondary.map(o => {
-        const {primary, secondary} = o;
-        let randomPaper = Math.floor(Math.random() * flatColorRangesLength);
-        let randomBackground = Math.floor(Math.random() * flatColorRangesLength);
-
-        let paper = colorRanges[randomPaper];
-        let background = colorRanges[randomBackground];
-
-        if(paper === primary || paper === secondary)
-        {
-            randomPaper = Math.floor(Math.random() * flatColorRangesLength);
-            paper = colorRanges[randomPaper];
-        }
-
-        if(background === primary || background === secondary || background === paper)
-        {
-            randomBackground = Math.floor(Math.random() * flatColorRangesLength);
-            background = colorRanges[randomBackground];
-        }
-
-        return {...o, paper, background}
-    });
-
-
 
     return output;
 }
 
+const filterBgShades = palettes => palettes.filter(p => bgShades.includes(p.colors.shade));
+const filterActionShades = palettes => palettes.filter(p => actionShades.includes(p.colors.shade));

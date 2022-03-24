@@ -110,7 +110,7 @@ export default class Payment extends Component {
 
     render(){
 
-        const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification, UrlParams} = this.props;
+        const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification, UrlParams, Theme} = this.props;
         const {walletNameParam, walletParamError} = UrlParams;
         const {appScreen} = Controllers;
         const appScreenArr = appScreen.split('.');
@@ -149,6 +149,7 @@ export default class Payment extends Component {
                         Controllers={Controllers}
                         Wallet={Wallet}
                         Config={Config}
+                        Theme={Theme}
                         updateNotification={updateNotification}                
                         />							
                 </>}	
@@ -174,13 +175,14 @@ const RenderWalletTemplate = ({children}) => (
     </Container>
 );
 
-const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, Config, updateNotification}) => (<>
+const RenderAppScreen = ({appScreen, dispatchInputChanges, Controllers, Wallet, Config, updateNotification, Theme}) => (<>
     {appScreen === 'app.payment.1' ? <>
         <PaymentConfigComponent
             dispatchInputChanges={dispatchInputChanges}
             Controllers={Controllers}
             Wallet={Wallet}
             Config={Config}
+            Theme={Theme}
         />
     </> : ''}
 

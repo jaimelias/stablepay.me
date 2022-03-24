@@ -46,7 +46,7 @@ class MainComponent extends Component {
 				<CssBaseline />
 				<AppBarComponent />
 
-				<Outlet context={{Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
+				<Outlet context={{Theme, Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
 
 				<NotificationComponent 
 					updateNotification={updateNotification}
