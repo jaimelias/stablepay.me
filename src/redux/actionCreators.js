@@ -28,7 +28,7 @@ const testAccount = {
         },
         bsc: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
-            assets: ['usdt', 'usdc', 'bnb']
+            assets: ['usdt', 'usdc', 'bnb', 'busd']
         },
         matic: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
@@ -105,12 +105,18 @@ export const switchTheme = payload => dispatch => {
     const {
         mode, 
         background_color, 
-        background_shade, 
-        primary_color, 
+        background_color_index,
+        background_shade,
+        background_shade_index,
+        primary_color,
+        primary_color_index,
         primary_shade,
+        primary_shade_index,
         primary_contrast_text,
         secondary_color,
+        secondary_color_index,
         secondary_shade,
+        secondary_shade_index,
         secondary_contrast_text
     } = palette;
 
@@ -118,18 +124,32 @@ export const switchTheme = payload => dispatch => {
         mode,
         primary: {
             main: Colors[primary_color][primary_shade],
-            contrastText: primary_contrast_text
+            contrastText: primary_contrast_text,
+            args: {
+                color: primary_color,
+                shade: primary_shade,
+                colorIndex: primary_color_index,
+                shadeIndex: primary_shade_index
+            }
         },
         secondary: {
           main:   Colors[secondary_color][secondary_shade],
           contrastText: secondary_contrast_text,
           args: {
               color: secondary_color,
-              shade: secondary_shade
+              shade: secondary_shade,
+              colorIndex: secondary_color_index,
+              shadeIndex: secondary_shade_index
           }
         },
         background: {
-            default: Colors[background_color][background_shade]
+            default: Colors[background_color][background_shade],
+            args: {
+                color: background_color,
+                shade: background_shade,
+                colorIndex: background_color_index,
+                shadeIndex: background_shade_index
+            }
         }
     }
 

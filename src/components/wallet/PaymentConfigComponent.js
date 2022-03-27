@@ -121,11 +121,15 @@ export default class PaymentConfigComponent extends Component {
 
     render(){
 
-        const {Controllers, Config, Wallet} = this.props;
+        const {Controllers, Config, Wallet, Theme} = this.props;
         const {networks} = Config;
         const {amount, network, asset, assets} = Controllers;
         const isInvalidAmount = (asset && network) ? isInvalidAmountString(amount) : true;
         let availableAssets = Object.keys(assets);
+
+        const {palette} = Theme.config;
+
+        console.log(Theme);
 
         let cofirmArr = [Wallet.data.name];
 
@@ -187,6 +191,7 @@ export default class PaymentConfigComponent extends Component {
                     asset={asset}
                     amount={amount}
                     handleAmountChange={this.handleAmountChange}
+                    palette={palette}
                 />
                 
                 <Button
@@ -205,28 +210,43 @@ export default class PaymentConfigComponent extends Component {
     };
 };
 
-const AmountField = ({network, asset, amount, handleAmountChange}) => (                
-    <TextField
-        disabled={!asset || !network}
-        sx={{mb: 3}}
-        fullWidth
-        id="amount"
-        label={'Amount'}
-        onChange={event => handleAmountChange(event.target.value)}
-        value={amount || ''}
-        autoComplete="off"
-        InputProps={{
-            startAdornment: (
-                <InputAdornment position="start">
-                    {asset ? <>
-                        <img alt="paymentIcon" src={cryptoIcons[`${asset}Icon`]} width="20" height="20" />
-                    </> : <>
-                        <Avatar alt="paymentIcon" sx={{width: 20, height: 20, fontSize: 12}} >$</Avatar>
-                    </>}
+const AmountField = ({network, asset, amount, handleAmountChange, palette}) => {
 
-                </InputAdornment>
-            )
-        }}
-        variant="filled"
-    />
-);
+    const {
+        secondary:
+          {
+            main:secondaryColor,
+            contrastText: secondaryContrastText
+          }, 
+          primary: {
+            main: primaryColor, 
+            contrastText: primaryContrastText
+          }
+      } = palette;
+    
+    return (                
+        <TextField
+            disabled={!asset || !network}
+            sx={{mb: 3}}
+            fullWidth
+            id="amount"
+            label={'Amount'}
+            onChange={event => handleAmountChange(event.target.value)}
+            value={amount || ''}
+            autoComplete="off"
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        {asset ? <>
+                            <img alt="paymentIcon" src={cryptoIcons[`${asset}Icon`]} width="20" height="20" />
+                        </> : <>
+                            <Avatar style={{backgroundColor: primaryColor, color: primaryContrastText}} alt="paymentIcon" sx={{width: 20, height: 20, fontSize: 12}} >$</Avatar>
+                        </>}
+    
+                    </InputAdornment>
+                )
+            }}
+            variant="filled"
+        />
+    );
+};

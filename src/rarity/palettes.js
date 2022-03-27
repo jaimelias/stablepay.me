@@ -8,6 +8,7 @@ const filterSecondaryShades = palettes => palettes.filter(p => secondaryShades.i
 const ValidColors = Colors;
 const modes = ['light', 'dark'];
 const allShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', 'A100', 'A200', 'A400', 'A700'];
+const colorKeys = ['red', 'pink', 'purple', 'deepPurple', 'indigo', 'blue', 'lightBlue', 'cyan', 'teal', 'green', 'lightGreen', 'lime', 'yellow', 'amber', 'orange', 'deepOrange', 'brown', 'grey', 'blueGrey'];
 
 const excludeFromLightMode = {
     red: ['50', '100', '200', '300', 'A100'],
@@ -52,6 +53,33 @@ const secondaryShades = ['400', '500', '600', '700', '800', '900', ...primarySha
 const bgShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', ...primaryShades];
 
 
+const getContrastLevel = ({colorAIndex, colorBIndex, shadeAIndex, shadeBIndex}) => {
+
+    let output = 'high';
+    const colorIndexDiff = colorAIndex - colorBIndex;
+    const shadeIndexDiff = shadeAIndex - shadeBIndex;
+
+    if(colorIndexDiff >= -2 && colorIndexDiff <= 2 )
+    {
+        if(shadeIndexDiff >= -2 && shadeIndexDiff <= 2 )
+        {
+            output = 'low';
+        }
+        else{
+            output = 'medium';
+        }
+    }
+    else if(colorIndexDiff >= 3 && colorIndexDiff <= -3 )
+    {
+        if(shadeIndexDiff >= -2 && shadeIndexDiff <= 2 )
+        {
+            output = 'medium';
+        }
+    }
+
+    return output;
+}
+
 export const getPalettes = () => {
     let colorRanges = [];
 
@@ -78,10 +106,14 @@ export const getPalettes = () => {
             {
                 const shadeInLightMode = isShadeInLightMode({mode: '', color: c, shade: s});
                 const contrastText = (shadeInLightMode) ? '#fff' : '#000';
+                const colorIndex = colorKeys.indexOf(c);
+                const shadeIndex = allShades.indexOf(s);
 
                 ColorArr.push({
                     color: c,
+                    colorIndex,
                     shade: s,
+                    shadeIndex,
                     contrastText
                 });
             }
@@ -116,38 +148,74 @@ export const generateMetadata = () => {
         {
             const background = validBgShades[bg];
             const background_color = background.color;
+            const background_color_index = background.colorIndex;
             const background_shade = background.shade;
+            const background_shade_index = background.shadeIndex;
 
             for(let pr = 0; pr < validPrimaryShadesLength; pr++)
             {
                 const primary = validPrimaryShades[pr];
                 const primary_color = primary.color;
+                const primary_color_index = primary.colorIndex;
                 const primary_shade = primary.shade;
+                const primary_shade_index = primary.shadeIndex;
                 const primary_contrast_text = primary.contrastText;
                 const shadeinLightMode = isShadeInLightMode({mode, shade: primary_shade, color: primary_color});
 
-                if(background_color !== primary_color && background_shade !== primary_shade && shadeinLightMode)
+                const primary_background_contrast  = getContrastLevel({
+                    colorAIndex: primary_color_index, 
+                    colorBIndex: background_color_index, 
+                    shadeAIndex: primary_shade_index, 
+                    shadeBIndex: background_shade_index
+                });
+
+                if(shadeinLightMode && (primary_background_contrast === 'high' || primary_background_contrast === 'medium'))
                 {
                     for(let se = 0; se < validSecondaryShadesLength; se++)
                     {
                         const secondary = validSecondaryShades[se];
                         const secondary_color = secondary.color;
+                        const secondary_color_index = secondary.colorIndex;
                         const secondary_shade = secondary.shade; 
-                        const secondary_contrast_text = secondary.contrastText;                       
+                        const secondary_shade_index = secondary.shadeIndex; 
+                        const secondary_contrast_text = secondary.contrastText;
+                        
+                        const secondary_background_contrast = getContrastLevel({
+                            colorAIndex: secondary_color_index, 
+                            colorBIndex: background_color_index, 
+                            shadeAIndex: secondary_shade_index, 
+                            shadeBIndex: background_shade_index
+                        });
+
+                        const secondary_primary_contrast = getContrastLevel({
+                            colorAIndex: secondary_color_index, 
+                            colorBIndex: primary_color_index, 
+                            shadeAIndex: secondary_shade_index, 
+                            shadeBIndex: primary_shade_index
+                        });
 
                         if(primary_color !== secondary_color && background_color !== secondary_color && background_shade !== secondary_shade && primary_shade !== secondary_shade)
                         {
-                            output.push({
-                                mode, 
-                                background_color, 
-                                background_shade,
-                                primary_color, 
-                                primary_shade,
-                                primary_contrast_text,
-                                secondary_color, 
-                                secondary_shade,
-                                secondary_contrast_text
-                            });
+                            if(secondary_background_contrast === 'high' && secondary_primary_contrast === 'high')
+                            {
+                                output.push({
+                                    mode, 
+                                    background_color,
+                                    background_color_index,
+                                    background_shade,
+                                    background_shade_index,
+                                    primary_color,
+                                    primary_color_index,
+                                    primary_shade,
+                                    primary_shade_index,
+                                    primary_contrast_text,
+                                    secondary_color,
+                                    secondary_color_index,
+                                    secondary_shade,
+                                    secondary_shade_index,
+                                    secondary_contrast_text
+                                });
+                            }
                         }
                     }
                 }

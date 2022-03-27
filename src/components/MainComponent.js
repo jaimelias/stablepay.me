@@ -29,12 +29,13 @@ class MainComponent extends Component {
 		setTimeout(() => {
 			fetchWallet(walletNameParam);
 			switchTheme();
-		}, 500);
+		}, 1000);
 	}
 
 	render() {
 
 		const {Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config, Theme} = this.props;
+		const {status} = Wallet;
 		const {notification} = Controllers;
 		const theme = createTheme(Theme.config);
 		const {palette} = theme;
@@ -43,13 +44,18 @@ class MainComponent extends Component {
 
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
-				<AppBarComponent palette={palette} />
+
+				{status === 'ok' ? <>
+					<AppBarComponent palette={palette} />
+				</> : ''}
+				
 
 				<Outlet context={{Theme, Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
 
 				<NotificationComponent 
 					updateNotification={updateNotification}
 					notification={notification}
+					palette={palette}
 					/>
 			</ThemeProvider>
 		</>)

@@ -51,9 +51,17 @@ export const CopyListItem = ({copyThis, label, message, image, labelSanitizer, u
     );
 }
 
-export const NotificationComponent = ({updateNotification, notification}) => {
+export const NotificationComponent = ({updateNotification, notification, palette}) => {
 
 	const {open, message} = notification;
+
+  const {
+    secondary:
+      {
+        main: secondaryColor,
+        contrastText: secondaryContrastText
+      }
+  } = palette;
 
     const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
@@ -65,7 +73,7 @@ export const NotificationComponent = ({updateNotification, notification}) => {
 
 	return(
 		<Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-			<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+			<Alert onClose={handleClose} sx={{ width: '100%', backgroundColor: secondaryColor, color:  secondaryContrastText}}>
 				{message}
 			</Alert>
 		</Snackbar>	
