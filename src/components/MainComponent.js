@@ -7,6 +7,9 @@ import AppBarComponent from './elements/AppBarComponent';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import {RecaptchaVerifiedComponent} from '../utilities/recaptcha-v3';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+
 
 const mapDispatchToProps = dispatch => (
 {
@@ -17,7 +20,6 @@ const mapDispatchToProps = dispatch => (
 });
 
 const mapStateToProps = state => ({...state});
-
 
 class MainComponent extends Component {
 
@@ -39,25 +41,32 @@ class MainComponent extends Component {
 		const {notification} = Controllers;
 		const theme = createTheme(Theme.config);
 		const {palette} = theme;
+
+		const verifiedComponent = (
+			<>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					{status === 'ok' ? <>
+						<AppBarComponent palette={palette} />
+					</> : ''}
+					
+					<Outlet context={{Theme, Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />
+
+				</ThemeProvider>		
+			</>
+		);
 		
 		return (<>
 
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
+			<GoogleReCaptchaProvider reCaptchaKey="6Ld77nkfAAAAAJbWHzIgzO7166yeBMrRkCAuUv6I">
+				<RecaptchaVerifiedComponent verifiedComponent={verifiedComponent} updateNotification={updateNotification} />	
+			</GoogleReCaptchaProvider>
 
-				{status === 'ok' ? <>
-					<AppBarComponent palette={palette} />
-				</> : ''}
-				
-
-				<Outlet context={{Theme, Controllers, Wallet, UrlParams, dispatchInputChanges, updateNotification, Config}} />	
-
-				<NotificationComponent 
-					updateNotification={updateNotification}
-					notification={notification}
-					palette={palette}
-					/>
-			</ThemeProvider>
+			<NotificationComponent 
+				updateNotification={updateNotification}
+				notification={notification}
+				palette={palette}
+				/>
 		</>)
 
 	};

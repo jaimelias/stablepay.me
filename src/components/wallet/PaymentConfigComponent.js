@@ -213,11 +213,6 @@ export default class PaymentConfigComponent extends Component {
 const AmountField = ({network, asset, amount, handleAmountChange, palette}) => {
 
     const {
-        secondary:
-          {
-            main:secondaryColor,
-            contrastText: secondaryContrastText
-          }, 
           primary: {
             main: primaryColor, 
             contrastText: primaryContrastText

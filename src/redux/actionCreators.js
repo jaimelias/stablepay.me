@@ -5,22 +5,10 @@ import * as Colors from '@mui/material/colors';
 
 const {WALLET_OK, WALLET_ERROR, CONTROLLER_CHANGE_AMOUNT, CONTROLLER_UPDATE_NOTIFICATION, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN, THEME_SWITCH} = actionTypes;
 
-
 const testAccount = {
     network: 'eth',
     name: 'jaimelias',
-    settings: {
-        themeConfig: {
-            backgroundColor: 'dark',
-            actionColor: '#ffcc00',
-        },
-        disableGoBackButton: true,
-		profileNFT: {
-			src: ''
-		},
-        callbackURL: '',
-        webookUrl: ''
-    },
+    created: new Date().toString(),
     data: {
         eth: {
             address: '0xAb88E902Ae4a49Db58d9D953Fbe59efd00512DC5',
