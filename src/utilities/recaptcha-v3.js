@@ -5,11 +5,10 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
 
     constructor(props){
         super(props);
-        this.handleExchangeRecaptchaForNonce = this.handleExchangeRecaptchaForNonce.bind(this);
+        this.handleRecaptcha = this.handleRecaptcha.bind(this);
     };
 
-
-    handleExchangeRecaptchaForNonce = async () => {
+    handleRecaptcha = async () => {
         const {updateNotification, googleReCaptchaProps} = this.props
         const { executeRecaptcha } = googleReCaptchaProps;
 
@@ -23,7 +22,10 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
 
         const token = await executeRecaptcha('loadWallet');
 
-        updateNotification({open: true, message: 'here we exchange the token for the nonce'});
+        const response = await fetch('http://127.0.0.1:8787/api/get-access-token');
+        const data = await response.json();
+
+        console.log(data);
     };
   
     render() {
@@ -32,7 +34,7 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
 
         return (
             <div>
-                <button onClick={this.handleExchangeRecaptchaForNonce}>Verify Recaptcha</button>
+                <button onClick={this.handleRecaptcha}>Verify Recaptcha</button>
 
                 {verifiedComponent}
 
