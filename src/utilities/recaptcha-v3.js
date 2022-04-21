@@ -18,8 +18,6 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
             return;
         }
 
-        updateNotification({open: false});
-
         const token = await executeRecaptcha('loadWallet');
 
         const response = await fetch('http://127.0.0.1:8787/api/get-access-token');

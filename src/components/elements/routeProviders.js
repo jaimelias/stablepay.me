@@ -14,11 +14,11 @@ export const RouteWalletComponent = () => {
     const context = useOutletContext();
     const {Wallet: {status}, UrlParams: {walletNameParam}} = context;
 
-    if(status === 'ok')
+    if(status === 'ok.wallet')
     {
         return <WalletComponent {...context} />;
     }
-    else if(status === 'loading')
+    else if(status === 'loading.wallet')
     {
         return (
             <Box sx={{my: 4, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

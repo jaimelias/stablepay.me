@@ -32,6 +32,31 @@ const excludeFromLightMode = {
     blueGrey: ['50', '100', '200', '300', 'A100', 'A200']
 }
 
+const basicColors = {
+    red: ['red', 'pink', 'deepOrange'],
+    yellow: ['lime', 'yellow', 'amber', 'orange'],
+    blue: ['deepPurple', 'indigo', 'blue', 'lightBlue', 'cyan'],
+    orange: ['amber', 'orange', 'deepOrange', 'red', 'pink',  'brown'],
+    green: ['cyan', 'teal', 'green', 'lightGreen', 'lime'],
+    violet: ['purple', 'deepPurple']
+};
+
+const basicColorAlike = (colorA, colorB) => {
+    let output = false;
+
+    for(let b in basicColors)
+    {
+        const basic = basicColors[b];
+
+        if(basicColors[b].includes(colorA) && basicColors[b].includes(colorB))
+        {
+            output = true;
+        }
+    }
+
+    return output;
+};
+
 
 export const isShadeInLightMode = ({mode, color, shade}) => {
 
@@ -169,7 +194,8 @@ export const generateMetadata = () => {
                     shadeBIndex: background_shade_index
                 });
 
-                if(shadeinLightMode && (primary_background_contrast === 'high' || primary_background_contrast === 'medium'))
+
+                if(shadeinLightMode && (primary_background_contrast === 'high' || primary_background_contrast === 'medium') && !basicColorAlike(background_color, primary_color))
                 {
                     for(let se = 0; se < validSecondaryShadesLength; se++)
                     {
@@ -194,7 +220,7 @@ export const generateMetadata = () => {
                             shadeBIndex: primary_shade_index
                         });
 
-                        if(primary_color !== secondary_color && background_color !== secondary_color && background_shade !== secondary_shade && primary_shade !== secondary_shade)
+                        if(primary_color !== secondary_color && background_color !== secondary_color && background_shade !== secondary_shade && primary_shade !== secondary_shade && !basicColorAlike(primary_color, secondary_color) && !basicColorAlike(background_color, secondary_color))
                         {
                             if(secondary_background_contrast === 'high' && secondary_primary_contrast === 'high')
                             {

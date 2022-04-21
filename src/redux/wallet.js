@@ -1,22 +1,30 @@
 import * as actionTypes from './actionTypes';
 
+const {WALLET_OK, WALLET_LOADING, WALLET_ERROR} = actionTypes;
+
 export const Wallet = (state = {
-    status: 'loading',
+    status: 'loading.wallet',
     errMess: '',
-    attempt: 1,
+    failedAttempts: {
+        wallet: 0
+    },
     data: {}
 }, action) => {
+
+    const {payload} = action;
+    let {failedAttempts} = state;
+
     switch (action.type)
     {
         case actionTypes.WALLET_OK:
-            return { ...state, status: 'ok', errMess: '', data: action.payload };
-
+            failedAttempts = {...failedAttempts, wallet: 0};
+            return { ...state, status: 'ok.wallet', errMess: '', data: payload, failedAttempts };
         case actionTypes.WALLET_LOADING:
-            return { ...state, status: 'loading', errMess: '', data: {} };
-
+            return { ...state, status: 'loading.wallet', errMess: '', data: {} };
         case actionTypes.WALLET_ERROR:
-            return { ...state, status: 'error', errMess: action.payload, data: {} };
+            failedAttempts = {...failedAttempts, wallet: (failedAttempts.wallet++)}
+            return { ...state, status: 'error.wallet', errMess: payload, data: {}, failedAttempts };
         default: 
             return state;
     }
-}; 
+};

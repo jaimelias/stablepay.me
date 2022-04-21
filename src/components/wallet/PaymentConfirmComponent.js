@@ -47,7 +47,7 @@ export default class PaymentConfirmationComponent extends Component {
         const {Wallet, Controllers, Config, updateNotification} = this.props;
         const {amount, network, asset, assets} = Controllers;
         const {networks} = Config;
-        const recipientWallet = (Wallet.status === 'ok') ? getRecipient({network, Wallet}) : {};
+        const recipientWallet = (Wallet.status === 'ok.wallet') ? getRecipient({network, Wallet}) : {};
         const {address: recipientWalletAddress, memo: recipientWalletMemo} = recipientWallet || '';
         
         let explorerBtnAttr = false;

@@ -46,7 +46,7 @@ class MainComponent extends Component {
 			<>
 				<ThemeProvider theme={theme}>
 					<CssBaseline />
-					{status === 'ok' ? <>
+					{status === 'ok.wallet' ? <>
 						<AppBarComponent palette={palette} />
 					</> : ''}
 					

@@ -129,8 +129,6 @@ export default class PaymentConfigComponent extends Component {
 
         const {palette} = Theme.config;
 
-        console.log(Theme);
-
         let cofirmArr = [Wallet.data.name];
 
         if(network)
