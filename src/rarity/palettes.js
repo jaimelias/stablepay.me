@@ -35,7 +35,7 @@ const excludeFromLightMode = {
 const basicColors = {
     red: ['red', 'pink', 'deepOrange'],
     yellow: ['lime', 'yellow', 'amber', 'orange'],
-    blue: ['deepPurple', 'indigo', 'blue', 'lightBlue', 'cyan'],
+    blue: ['purple', 'deepPurple', 'indigo', 'blue', 'lightBlue', 'cyan', 'teal'],
     orange: ['amber', 'orange', 'deepOrange', 'red', 'pink',  'brown'],
     green: ['cyan', 'teal', 'green', 'lightGreen', 'lime'],
     violet: ['purple', 'deepPurple']
@@ -74,8 +74,8 @@ export const isShadeInLightMode = ({mode, color, shade}) => {
 };
 
 const primaryShades = ['A100', 'A200', 'A400', 'A700'];
-const secondaryShades = ['400', '500', '600', '700', '800', '900', ...primaryShades];
-const bgShades = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', ...primaryShades];
+const secondaryShades = ['400', '500', '600', ...primaryShades];
+const bgShades = ['50', '100', '200', '300', '400', '500', '600', ...primaryShades];
 
 
 const getContrastLevel = ({colorAIndex, colorBIndex, shadeAIndex, shadeBIndex}) => {
@@ -125,7 +125,7 @@ export const getPalettes = () => {
     {
         const shades = ValidColors[c];
 
-        if(c !== 'grey' && c !== 'common')
+        if(c !== 'grey' && c !== 'brown' && c !== 'common' )
         {
             for(let s in shades)
             {

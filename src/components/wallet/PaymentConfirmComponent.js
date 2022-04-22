@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Divider from '@mui/material/Divider';
-import { Link } from 'react-router-dom';
 import  {abbreviateAddress, getRecipient} from '../../utilities/utilities';
 import {CopyListItem} from '../elements/appElements';
 import { cryptoIcons, appIcons } from '../../assets/svgIcons';
@@ -17,11 +15,8 @@ export default class PaymentConfirmationComponent extends Component {
 
     constructor(props){
         super(props);
-
         this.handleOpenExplorer = this.handleOpenExplorer.bind(this);
-        this.handleGoConfigComponent = this.handleGoConfigComponent.bind(this);
     }
-
 
     handleOpenExplorer({asset, network}){
         const {Config, Controllers} = this.props;
@@ -34,12 +29,6 @@ export default class PaymentConfirmationComponent extends Component {
 
             window.open(explorerUrl, "_blank")
         }
-    }
-
-    handleGoConfigComponent(){
-        const {dispatchInputChanges, ResetWallet} = this.props;
-
-        ResetWallet({dispatchInputChanges});
     }
 
     render()
@@ -117,7 +106,6 @@ export default class PaymentConfirmationComponent extends Component {
                     </> : ''}
                    
                 </List>
-                <Button onClick={() => this.handleGoConfigComponent()} size="small" component={Link} to={`/${Wallet.data.name}`}>{'Go back'}</Button>
             </>
         );        
     }

@@ -7,20 +7,15 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Link } from 'react-router-dom';
-import  {round, filterAssets} from '../../utilities/utilities';
-import  {isInvalidAmountString, isValidAmountTyping} from '../../utilities/validators';
+import  {filterAssets} from '../../utilities/utilities';
+import  {isValidAmountTyping} from '../../utilities/validators';
 import * as actionTypes from '../../redux/actionTypes';
-import { cryptoIcons, appIcons } from '../../assets/svgIcons';
+import { cryptoIcons } from '../../assets/svgIcons';
 import Avatar from '@mui/material/Avatar';
 
-
-const {dollarIcon} = appIcons;
-
-const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET, CONTROLLER_CHANGE_APP_SCREEN} = actionTypes;
+const {CONTROLLER_CHANGE_AMOUNT, CONTROLLER_SELECT_NETWORK, CONTROLLER_SELECT_ASSET} = actionTypes;
 
 
 export default class PaymentConfigComponent extends Component {
@@ -29,7 +24,6 @@ export default class PaymentConfigComponent extends Component {
         this.handleAmountChange = this.handleAmountChange.bind(this);
         this.handleNetworkSelect = this.handleNetworkSelect.bind(this);
         this.handleAssetSelect = this.handleAssetSelect.bind(this);
-        this.handleGoConfirmComponent = this.handleGoConfirmComponent.bind(this);
     }
 
     handleAmountChange(amountParam){
@@ -97,53 +91,14 @@ export default class PaymentConfigComponent extends Component {
         }
     };    
 
-    handleGoConfirmComponent()
-    {
-        const {Controllers, dispatchInputChanges} = this.props;
-        let {amount, assets, asset} = Controllers;
-        const decimals = assets[asset].decimals;
-
-        if(isValidAmountTyping(amount))
-        {
-            amount = round({val: amount, precision: decimals});
-
-            dispatchInputChanges({
-                type: CONTROLLER_CHANGE_AMOUNT,
-                payload: amount.toString() || ''
-            });
-
-            dispatchInputChanges({
-                type: CONTROLLER_CHANGE_APP_SCREEN,
-                payload: 'app.payment.2'
-            });         
-        }        
-    }
-
     render(){
 
-        const {Controllers, Config, Wallet, Theme} = this.props;
+        const {Controllers, Config, Theme} = this.props;
         const {networks} = Config;
         const {amount, network, asset, assets} = Controllers;
-        const isInvalidAmount = (asset && network) ? isInvalidAmountString(amount) : true;
         let availableAssets = Object.keys(assets);
 
         const {palette} = Theme.config;
-
-        let cofirmArr = [Wallet.data.name];
-
-        if(network)
-        {
-            cofirmArr.push(network);
-
-            cofirmArr.push(asset);
-
-            if(!isInvalidAmount)
-            {
-                cofirmArr.push(amount);
-            }
-        }
-
-        const cofirmPath = cofirmArr.join('/');
 
         return (
             <>
@@ -191,18 +146,6 @@ export default class PaymentConfigComponent extends Component {
                     handleAmountChange={this.handleAmountChange}
                     palette={palette}
                 />
-                
-                <Button
-                    disabled={!network || !asset || isInvalidAmount}
-                    sx={{mb: 3}} 
-                    type="button" 
-                    fullWidth
-                    size="small"
-                    color="primary"
-                    component={network && asset && !isInvalidAmount ? Link : 'button'}
-                    to={network && asset && !isInvalidAmount ? `/${cofirmPath}` : ''}
-                    onClick={() => this.handleGoConfirmComponent()}
-                    variant='contained'>{'Next'}</Button>
             </>
         )
     };

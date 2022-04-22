@@ -4,7 +4,7 @@ import PaymentConfirmationComponent from './PaymentConfirmComponent';
 import Box from '@mui/material/Box';
 import  {filterAssets, round} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
-import {StepsComponent} from '../elements/appElements';
+import {BottomStepComponent} from '../elements/appElements';
 import Paper from '@mui/material/Paper';
 import {AvatarComponent} from '../elements/AvatarComponent';
 import Button from '@mui/material/Button';
@@ -113,8 +113,7 @@ export default class Payment extends Component {
         const {Wallet, Controllers, Config, dispatchInputChanges, updateNotification, UrlParams, Theme} = this.props;
         const {walletNameParam, walletParamError} = UrlParams;
         const {appScreen} = Controllers;
-        const appScreenArr = appScreen.split('.');
-        const appScreenNumber = parseFloat(appScreenArr[appScreenArr.length - 1]);
+
 
         const avatar = <AvatarComponent walletNameParam={walletNameParam} />;
 
@@ -138,10 +137,7 @@ export default class Payment extends Component {
 
                 {walletParamError ? <>
                     {fixParamsButton}
-                </> : <>
-                    <Box sx={{mb: 3}}>
-                        <StepsComponent steps={['Payment', 'Checkout']} appScreen={appScreenNumber} />
-                    </Box>                
+                </> : <>          
 
                     <RenderAppScreen
                         appScreen={appScreen}
@@ -151,7 +147,17 @@ export default class Payment extends Component {
                         Config={Config}
                         Theme={Theme}
                         updateNotification={updateNotification}                
-                        />							
+                        />	
+
+                    <BottomStepComponent 
+                        theme={Theme} 
+                        appScreen={appScreen} 
+                        ResetWallet={ResetWallet}
+                        dispatchInputChanges={dispatchInputChanges}
+                        Controllers={Controllers}
+                        Wallet={Wallet}
+                        />
+
                 </>}	
 
 
