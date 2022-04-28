@@ -9,7 +9,7 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
     };
 
     handleRecaptcha = async () => {
-        const {updateNotification, googleReCaptchaProps} = this.props
+        const {updateNotification, googleReCaptchaProps, action} = this.props
         const { executeRecaptcha } = googleReCaptchaProps;
 
         if (!executeRecaptcha) {
@@ -18,9 +18,9 @@ import {withGoogleReCaptcha} from 'react-google-recaptcha-v3';
             return;
         }
 
-        const token = await executeRecaptcha('loadWallet');
+        const token = await executeRecaptcha(action);
 
-        const response = await fetch('http://127.0.0.1:8787/api/get-access-token');
+        const response = await fetch(`http://127.0.0.1:8787/api/get-access-token/${token}`);
         const data = await response.json();
 
         console.log(data);

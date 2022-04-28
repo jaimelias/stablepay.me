@@ -4,7 +4,7 @@ import PaymentConfirmationComponent from './PaymentConfirmComponent';
 import Box from '@mui/material/Box';
 import  {filterAssets, round} from '../../utilities/utilities';
 import * as actionTypes from '../../redux/actionTypes';
-import {BottomStepComponent} from '../elements/appElements';
+import BottomStepComponent from '../elements/BottomStepComponent';
 import Paper from '@mui/material/Paper';
 import {AvatarComponent} from '../elements/AvatarComponent';
 import Button from '@mui/material/Button';

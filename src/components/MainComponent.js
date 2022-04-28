@@ -59,7 +59,7 @@ class MainComponent extends Component {
 		return (<>
 
 			<GoogleReCaptchaProvider reCaptchaKey="6Ld77nkfAAAAAJbWHzIgzO7166yeBMrRkCAuUv6I">
-				<RecaptchaVerifiedComponent verifiedComponent={verifiedComponent} updateNotification={updateNotification} />	
+				<RecaptchaVerifiedComponent action="loadWallet" verifiedComponent={verifiedComponent} updateNotification={updateNotification} />	
 			</GoogleReCaptchaProvider>
 
 			<NotificationComponent 
